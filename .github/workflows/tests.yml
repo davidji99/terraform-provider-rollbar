@@ -1,0 +1,42 @@
+name: tests
+on: [push, pull_request]
+env:
+  GO111MODULE: on
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        go-version: [1.12.x, 1.13.x]
+        platform: [ubuntu-latest]
+    runs-on: ${{ matrix.platform }}
+    
+    steps:
+      - uses: actions/setup-go@v1
+        with:
+          go-version: ${{ matrix.go-version }}
+      - uses: actions/checkout@v2
+      
+      - name: Cache go modules
+        uses: actions/cache@v1
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('go.sum') }}
+          restore-keys: ${{ runner.os }}-go-
+
+      - name: Run make fmt
+        if: runner.os != 'Windows'
+        run: diff -u <(echo -n) <(make fmt)
+        
+      - name: Run go vet
+        run: go vet ./...
+      
+      - name: Run make test
+        run: make test
+      
+      - name: Ensure go run gen-accessors produces a zero diff
+        shell: bash
+        run: |
+          cd rollbar_api
+          go run gen-accessors.go && git diff --exit-code; code=$?; git checkout -- .; (exit $code)
+      
