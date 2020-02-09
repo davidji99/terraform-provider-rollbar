@@ -1,3 +1,5 @@
+[![Test Status](https://github.com/davidji99/terraform-provider-rollbar/workflows/tests/badge.svg)](https://github.com/davidji99/terraform-provider-rollbar/actions?query=workflow%3Atests)
+
 Terraform Provider Rollbar
 =========================
 
