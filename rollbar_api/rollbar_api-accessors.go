@@ -379,3 +379,46 @@ func (t *TokenAuthConfig) GetProjectAccessToken() string {
 	}
 	return *t.ProjectAccessToken
 }
+
+// GetEmail returns the Email field if it's non-nil, zero value otherwise.
+func (u *User) GetEmail() string {
+	if u == nil || u.Email == nil {
+		return ""
+	}
+	return *u.Email
+}
+
+// GetID returns the ID field if it's non-nil, zero value otherwise.
+func (u *User) GetID() int64 {
+	if u == nil || u.ID == nil {
+		return 0
+	}
+	return *u.ID
+}
+
+// GetUsername returns the Username field if it's non-nil, zero value otherwise.
+func (u *User) GetUsername() string {
+	if u == nil || u.Username == nil {
+		return ""
+	}
+	return *u.Username
+}
+
+// HasResult checks if UserListResponse has any Result.
+func (u *UserListResponse) HasResult() bool {
+	if u == nil || u.Result == nil {
+		return false
+	}
+	if len(u.Result) == 0 {
+		return false
+	}
+	return true
+}
+
+// GetResult returns the Result field.
+func (u *UserResponse) GetResult() *User {
+	if u == nil {
+		return nil
+	}
+	return u.Result
+}
