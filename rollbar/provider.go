@@ -32,9 +32,12 @@ func Provider() terraform.ResourceProvider {
 		ResourcesMap: map[string]*schema.Resource{
 			"rollbar_project":              resourceRollbarProject(),
 			"rollbar_project_access_token": resourceRollbarProjectAccessToken(),
+			"rollbar_team":                 resourceRollbarTeam(),
 		},
 
-		DataSourcesMap: map[string]*schema.Resource{},
+		DataSourcesMap: map[string]*schema.Resource{
+			"rollbar_team": dataSourceRollbarTeam(),
+		},
 
 		ConfigureFunc: providerConfigure,
 	}

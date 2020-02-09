@@ -36,6 +36,7 @@ type Client struct {
 	// Services used for talking to different parts of the Rollbar API.
 	Projects            *ProjectsService
 	ProjectAccessTokens *ProjectAccessTokensService
+	Teams               *TeamsService
 
 	// Custom HTTPHeaders
 	customHttpHeaders map[string]string
@@ -89,6 +90,7 @@ func (c *Client) injectServices() {
 	c.common.client = c
 	c.Projects = (*ProjectsService)(&c.common)
 	c.ProjectAccessTokens = (*ProjectAccessTokensService)(&c.common)
+	c.Teams = (*TeamsService)(&c.common)
 }
 
 // setupClient sets common headers and other configurations.

@@ -23,6 +23,7 @@ type ProjectAccessToken struct {
 	Scopes                      []string `json:"scopes,omitempty"`
 }
 
+// ProjectAccessTokenResponse represents the response returned after creating a new access token.
 type ProjectAccessTokenResponse struct {
 	ErrorCount int                 `json:"err,omitempty"`
 	Result     *ProjectAccessToken `json:"result,omitempty"`
