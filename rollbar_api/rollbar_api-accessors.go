@@ -313,6 +313,57 @@ func (p *ProjectSDMigrations) GetRecognizeDirectRecursion() int {
 	return *p.RecognizeDirectRecursion
 }
 
+// GetAccessLevel returns the AccessLevel field if it's non-nil, zero value otherwise.
+func (t *Team) GetAccessLevel() string {
+	if t == nil || t.AccessLevel == nil {
+		return ""
+	}
+	return *t.AccessLevel
+}
+
+// GetAccountID returns the AccountID field if it's non-nil, zero value otherwise.
+func (t *Team) GetAccountID() int64 {
+	if t == nil || t.AccountID == nil {
+		return 0
+	}
+	return *t.AccountID
+}
+
+// GetID returns the ID field if it's non-nil, zero value otherwise.
+func (t *Team) GetID() int64 {
+	if t == nil || t.ID == nil {
+		return 0
+	}
+	return *t.ID
+}
+
+// GetName returns the Name field if it's non-nil, zero value otherwise.
+func (t *Team) GetName() string {
+	if t == nil || t.Name == nil {
+		return ""
+	}
+	return *t.Name
+}
+
+// HasResult checks if TeamListResponse has any Result.
+func (t *TeamListResponse) HasResult() bool {
+	if t == nil || t.Result == nil {
+		return false
+	}
+	if len(t.Result) == 0 {
+		return false
+	}
+	return true
+}
+
+// GetResult returns the Result field.
+func (t *TeamResponse) GetResult() *Team {
+	if t == nil {
+		return nil
+	}
+	return t.Result
+}
+
 // GetAccountAccessToken returns the AccountAccessToken field if it's non-nil, zero value otherwise.
 func (t *TokenAuthConfig) GetAccountAccessToken() string {
 	if t == nil || t.AccountAccessToken == nil {
