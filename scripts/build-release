@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+
+os=$(uname)
+PROVIDER="rollbar"
+VERSION=$(go run ${PROVIDER}/version.go)
+
+# Install gox if it isn't installed on the machine.
+if [ "$(command -v gox)" = "" ]; then
+  echo "gox is not installed. Installing now..."
+  go get github.com/mitchellh/gox
+
+  echo "Running go mod tidy to cleanup go.mod file"
+  go mod tidy
+fi
+
+# Create target folder
+mkdir -v -p target
+
+echo "Generating release binaries for provider ${PROVIDER}"
+
+# Create SHA256SUM file
+SHASUM_FILE="target/${PROVIDER}-${VERSION}_SHA256SUMS"
+
+# Delete the old file if it exists
+rm -rf "${SHASUM_FILE}"
+
+# Create a new empty file
+touch "${SHASUM_FILE}"
+
+platforms=("linux/386" "linux/amd64" "linux/arm" "darwin/amd64" "windows/386" "windows/amd64"
+"freebsd/386" "freebsd/amd64" "freebsd/arm" "openbsd/386" "openbsd/amd64" "solaris/amd64")
+
+for platform in "${platforms[@]}"
+do
+  platform_split=(${platform//\// })
+  GOOS=${platform_split[0]}
+  GOARCH=${platform_split[1]}
+
+  OUTPUT_FILE="target/${GOOS}_${GOARCH}/terraform-provider-${PROVIDER}_v${VERSION}"
+
+  gox -os="${GOOS}" \
+    -arch="${GOARCH}" -osarch='!darwin/arm !darwin/386' \
+    -output "${OUTPUT_FILE}" .
+
+  # Define the file output name
+  zipped_file="${PROVIDER}-${VERSION}-${GOOS}-${GOARCH}.zip"
+
+  if [ "${GOOS}" = "windows" ]; then
+      OUTPUT_FILE+='.exe'
+  fi
+
+  # Compress and zip up new binary
+  zip -9 -D -j target/"${zipped_file}" $OUTPUT_FILE
+  rm -rf PROVIDER
+
+  # Generate SHASUM
+  if [ "$os" == "Darwin" ]; then
+      (cd target && shasum -a 256 "${zipped_file}") >> "${SHASUM_FILE}"
+  elif [ "$os" == "Linux" ]; then
+      (cd target && sha256sum  "${zipped_file}") >> "${SHASUM_FILE}"
+  else
+      echo "Unsupported OS for generating SHASUM256"
+      exit 1
+  fi
+done

@@ -1,0 +1,38 @@
+<% wrap_layout :inner do %>
+  <% content_for :sidebar do %>
+    <div class="docs-sidebar hidden-print affix-top" role="complementary">
+      <ul class="nav docs-sidenav">
+        <li<%= sidebar_current("docs-home") %>>
+        <a href="/docs/providers/index.html">All Providers</a>
+                </li>
+
+        <li<%= sidebar_current("docs-rollbar-index") %>>
+        <a href="/docs/providers/rollbar/index.html">Rollbar Provider</a>
+                </li>
+
+        <li<%= sidebar_current("docs-rollbar-datasource") %>>
+        <a href="#">Data Sources</a>
+            <ul class="nav nav-visible">
+#                 <li<%= sidebar_current("docs-rollbar-datasource-agent") %>>
+#                     <a href="/docs/providers/rollbar/d/agent.html">rollbar_agent</a>
+#                 </li>
+            </ul>
+
+        <li<%= sidebar_current("docs-rollbar-resource") %>>
+        <a href="#">Resources</a>
+            <ul class="nav nav-visible">
+                <li<%= sidebar_current("docs-rollbar-resource-project") %>>
+                  <a href="/docs/providers/rollbar/r/project.html">rollbar_project</a>
+                </li>
+
+                <li<%= sidebar_current("docs-rollbar-resource-project-access-token") %>>
+                  <a href="/docs/providers/rollbar/r/project_access_token.html">rollbar_project_access_token</a>
+                </li>
+            </ul>
+        </li>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= yield %>
+  <% end %>
