@@ -26,7 +26,9 @@ jobs:
 
       - name: Run make fmt
         if: runner.os != 'Windows'
-        run: diff -u <(echo -n) <(make fmt)
+        run: |
+          make fmt
+          git diff --exit-code; code=$?; git checkout -- .; (exit $code)
         
       - name: Run go vet
         run: go vet ./...
@@ -38,5 +40,6 @@ jobs:
         shell: bash
         run: |
           cd rollbar_api
-          go run gen-accessors.go && git diff --exit-code; code=$?; git checkout -- .; (exit $code)
+          go run gen-accessors.go
+          git diff --exit-code; code=$?; git checkout -- .; (exit $code)
       
