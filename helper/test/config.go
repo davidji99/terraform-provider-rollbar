@@ -10,10 +10,12 @@ import (
 const (
 	TestConfigAccountAccessToken TestConfigKey = iota
 	TestConfigAcceptanceTestKey
+	TestConfigUserKey
 )
 
 var testConfigKeyToEnvName = map[TestConfigKey]string{
 	TestConfigAccountAccessToken: "ROLLBAR_ACCOUNT_ACCESS_TOKEN",
+	TestConfigUserKey:            "ROLLBAR_USER",
 	TestConfigAcceptanceTestKey:  resource.TestEnvVar,
 }
 
@@ -65,4 +67,8 @@ func (t *TestConfig) SkipUnlessAccTest(testing *testing.T) {
 	if val == "" {
 		testing.Skip(fmt.Sprintf("Acceptance tests skipped unless env '%s' set", TestConfigAcceptanceTestKey.String()))
 	}
+}
+
+func (t *TestConfig) GetUserOrAbort(testing *testing.T) (val string) {
+	return t.GetOrAbort(testing, TestConfigUserKey)
 }

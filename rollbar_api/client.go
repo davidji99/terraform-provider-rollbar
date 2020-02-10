@@ -37,6 +37,7 @@ type Client struct {
 	Projects            *ProjectsService
 	ProjectAccessTokens *ProjectAccessTokensService
 	Teams               *TeamsService
+	Users               *UsersService
 
 	// Custom HTTPHeaders
 	customHttpHeaders map[string]string
@@ -91,6 +92,7 @@ func (c *Client) injectServices() {
 	c.Projects = (*ProjectsService)(&c.common)
 	c.ProjectAccessTokens = (*ProjectAccessTokensService)(&c.common)
 	c.Teams = (*TeamsService)(&c.common)
+	c.Users = (*UsersService)(&c.common)
 }
 
 // setupClient sets common headers and other configurations.

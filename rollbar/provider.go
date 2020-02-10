@@ -37,6 +37,7 @@ func Provider() terraform.ResourceProvider {
 
 		DataSourcesMap: map[string]*schema.Resource{
 			"rollbar_team": dataSourceRollbarTeam(),
+			"rollbar_user": dataSourceRollbarUser(),
 		},
 
 		ConfigureFunc: providerConfigure,
