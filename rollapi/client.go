@@ -1,4 +1,4 @@
-package rollbar_api
+package rollapi
 
 import (
 	"fmt"

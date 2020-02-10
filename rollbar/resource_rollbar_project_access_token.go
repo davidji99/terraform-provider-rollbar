@@ -2,7 +2,7 @@ package rollbar
 
 import (
 	"fmt"
-	"github.com/davidji99/terraform-provider-rollbar/rollbar_api"
+	"github.com/davidji99/terraform-provider-rollbar/rollapi"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	"log"
@@ -112,7 +112,7 @@ func resourceRollbarProjectAccessTokenImport(d *schema.ResourceData, meta interf
 
 func resourceRollbarProjectAccessTokenCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*Config).API
-	opts := &rollbar_api.PATCreateRequest{}
+	opts := &rollapi.PATCreateRequest{}
 
 	if v, ok := d.GetOk("name"); ok {
 		vs := v.(string)
@@ -212,7 +212,7 @@ func resourceRollbarProjectAccessTokenRead(d *schema.ResourceData, meta interfac
 
 func resourceRollbarProjectAccessTokenUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*Config).API
-	opts := &rollbar_api.PATUpdateRequest{}
+	opts := &rollapi.PATUpdateRequest{}
 
 	if v, ok := d.GetOk("rate_limit_window_size"); ok {
 		vs := v.(int)

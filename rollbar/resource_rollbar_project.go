@@ -1,7 +1,7 @@
 package rollbar
 
 import (
-	"github.com/davidji99/terraform-provider-rollbar/rollbar_api"
+	"github.com/davidji99/terraform-provider-rollbar/rollapi"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	"log"
@@ -50,7 +50,7 @@ func resourceRollbarProjectImport(d *schema.ResourceData, meta interface{}) ([]*
 
 func resourceRollbarProjectCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*Config).API
-	opts := &rollbar_api.ProjectRequest{}
+	opts := &rollapi.ProjectRequest{}
 
 	if v, ok := d.GetOk("name"); ok {
 		vs := v.(string)

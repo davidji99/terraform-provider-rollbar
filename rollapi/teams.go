@@ -1,4 +1,4 @@
-package rollbar_api
+package rollapi
 
 // TeamsService handles communication with the teams related
 // methods of the Rollbar API.

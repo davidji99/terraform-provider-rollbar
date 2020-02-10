@@ -1,4 +1,4 @@
-package rollbar_api
+package rollapi
 
 // ProjectsService handles communication with the project related
 // methods of the Rollbar API.

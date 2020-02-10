@@ -1,4 +1,4 @@
-package rollbar_api
+package rollapi
 
 // UsersService handles communication with the users related
 // methods of the Rollbar API.
