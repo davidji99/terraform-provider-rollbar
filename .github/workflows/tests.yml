@@ -39,7 +39,7 @@ jobs:
       - name: Ensure go run gen-accessors produces a zero diff
         shell: bash
         run: |
-          cd rollbar_api
+          cd rollapi
           go run gen-accessors.go
           git diff --exit-code; code=$?; git checkout -- .; (exit $code)
       

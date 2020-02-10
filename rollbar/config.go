@@ -2,12 +2,12 @@ package rollbar
 
 import (
 	"encoding/json"
-	"github.com/davidji99/terraform-provider-rollbar/rollbar_api"
+	"github.com/davidji99/terraform-provider-rollbar/rollapi"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
 type Config struct {
-	API                *rollbar_api.Client
+	API                *rollapi.Client
 	Headers            map[string]string
 	accountAccessToken string
 	projectAccessToken string
@@ -19,12 +19,12 @@ func NewConfig() *Config {
 }
 
 func (c *Config) initializeAPI() error {
-	authConfig := &rollbar_api.TokenAuthConfig{
+	authConfig := &rollapi.TokenAuthConfig{
 		AccountAccessToken: &c.accountAccessToken,
-		CustomHttpHeaders:  c.Headers,
+		CustomHTTPHeaders:  c.Headers,
 	}
 
-	api, clientInitErr := rollbar_api.NewClientTokenAuth(authConfig)
+	api, clientInitErr := rollapi.NewClientTokenAuth(authConfig)
 	if clientInitErr != nil {
 		return clientInitErr
 	}

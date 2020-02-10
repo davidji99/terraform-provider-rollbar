@@ -1,4 +1,4 @@
-package rollbar_api
+package rollapi
 
 import (
 	"fmt"
@@ -11,8 +11,13 @@ import (
 )
 
 const (
-	DefaultAPIBaseUrl = "https://api.rollbar.com/api/1"
-	DefaultUserAgent  = "go-rollbar-api"
+	// DefaultAPIBaseURL is the base URL when making API calls.
+	DefaultAPIBaseURL = "https://api.rollbar.com/api/1"
+
+	// DefaultUserAgent is the user agent used when making API calls.
+	DefaultUserAgent = "go-rollbar-api"
+
+	// RollbarAuthHeader is the Authorization header.
 	RollbarAuthHeader = "x-rollbar-access-token"
 )
 
@@ -40,7 +45,7 @@ type Client struct {
 	Users               *UsersService
 
 	// Custom HTTPHeaders
-	customHttpHeaders map[string]string
+	customHTTPHeaders map[string]string
 
 	// Account access token
 	accountAccessToken string
@@ -63,9 +68,10 @@ type TokenAuthConfig struct {
 	AccountAccessToken *string
 
 	// Custom HTTPHeaders
-	CustomHttpHeaders map[string]string
+	CustomHTTPHeaders map[string]string
 }
 
+// NewClientTokenAuth constructs a new client to interact with the Rollbar API using a project or account access token.
 func NewClientTokenAuth(config *TokenAuthConfig) (*Client, error) {
 	// Validate that either ProjectAccessToken or AccountAccessToken are set in TokenAuthConfig.
 	if config.GetProjectAccessToken() != "" && config.GetAccountAccessToken() != "" {
@@ -74,8 +80,8 @@ func NewClientTokenAuth(config *TokenAuthConfig) (*Client, error) {
 
 	// Construct new client.
 	c := &Client{
-		http: resty.New(), BaseURL: DefaultAPIBaseUrl, UserAgent: DefaultUserAgent,
-		customHttpHeaders: config.CustomHttpHeaders, accountAccessToken: config.GetAccountAccessToken(),
+		http: resty.New(), BaseURL: DefaultAPIBaseURL, UserAgent: DefaultUserAgent,
+		customHTTPHeaders: config.CustomHTTPHeaders, accountAccessToken: config.GetAccountAccessToken(),
 		projectAccessToken: config.GetProjectAccessToken(),
 	}
 	c.injectServices()
@@ -107,8 +113,8 @@ func (c *Client) setupClient() {
 		SetAllowGetMethodPayload(true)
 
 	// Set additional headers
-	if c.customHttpHeaders != nil {
-		c.http.SetHeaders(c.customHttpHeaders)
+	if c.customHTTPHeaders != nil {
+		c.http.SetHeaders(c.customHTTPHeaders)
 	}
 }
 
@@ -184,6 +190,7 @@ func (c *Client) Put(url string, v, body interface{}) (*Response, error) {
 	return checkResponse(resp)
 }
 
+// Response represents the HTTP response returned from an API call.
 type Response struct {
 	URL        string
 	Method     string
