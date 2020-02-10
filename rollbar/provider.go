@@ -30,6 +30,8 @@ func Provider() terraform.ResourceProvider {
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
+			"rollbar_pagerduty_integration": resourceRollbarPagerDutyIntegration(),
+			//"rollbar_pagerduty_notification_rule": resourceRollbarPagerDutyNotificationRule(),
 			"rollbar_project":              resourceRollbarProject(),
 			"rollbar_project_access_token": resourceRollbarProjectAccessToken(),
 			"rollbar_team":                 resourceRollbarTeam(),
@@ -51,10 +53,12 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	config := NewConfig()
 
 	if accountAccessToken, ok := d.GetOk("account_access_token"); ok {
+		log.Printf("[DEBUG] account_access_token to be used: %v", accountAccessToken)
 		config.accountAccessToken = accountAccessToken.(string)
 	}
 
 	if projectAccessToken, ok := d.GetOk("project_access_token"); ok {
+		log.Printf("[DEBUG] project_access_token to be used: %v", projectAccessToken)
 		config.projectAccessToken = projectAccessToken.(string)
 	}
 

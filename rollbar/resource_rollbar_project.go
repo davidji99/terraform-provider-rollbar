@@ -58,14 +58,14 @@ func resourceRollbarProjectCreate(d *schema.ResourceData, meta interface{}) erro
 		opts.Name = vs
 	}
 
-	log.Printf("Creating new project %s", opts.Name)
+	log.Printf("[DEBUG] Creating new project %s", opts.Name)
 
 	newProject, _, createErr := client.Projects.Create(opts)
 	if createErr != nil {
 		return createErr
 	}
 
-	log.Printf("Created new project %s", opts.Name)
+	log.Printf("[DEBUG] Created new project %s", opts.Name)
 
 	d.SetId(Int64ToString(newProject.GetResult().GetID()))
 
@@ -91,7 +91,7 @@ func resourceRollbarProjectRead(d *schema.ResourceData, meta interface{}) error 
 func resourceRollbarProjectDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*Config).API
 
-	log.Printf("Project id to be deleted: %v", d.Id())
+	log.Printf("[DEBUG] Project id to be deleted: %v", d.Id())
 
 	_, deleteErr := client.Projects.Delete(StringToInt(d.Id()))
 	if deleteErr != nil {

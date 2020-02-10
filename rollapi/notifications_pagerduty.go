@@ -8,7 +8,7 @@ type NotificationsService service
 
 // PDIntegrationRequest represents a request to configure Rollbar with PagerDuty.
 type PDIntegrationRequest struct {
-	Enabled    bool   `json:"enabled,omitempty"`
+	Enabled    *bool  `json:"enabled,omitempty"`
 	ServiceKey string `json:"service_key,omitempty"`
 }
 
@@ -33,12 +33,12 @@ type PDRuleConfig struct {
 	ServiceKey string `json:"service_key,omitempty"`
 }
 
-// ConfigurePagerDuty configures the PagerDuty integration for a project.
+// ConfigurePagerDutyIntegration configures the PagerDuty integration for a project.
 //
 // This function creates and modifies the PagerDuty integration. Requires a project access token.
 //
 // Rollbar API docs: https://docs.rollbar.com/reference#configuring-pagerduty-integration
-func (n *NotificationsService) ConfigurePagerDuty(opts *PDIntegrationRequest) (*Response, error) {
+func (n *NotificationsService) ConfigurePagerDutyIntegration(opts *PDIntegrationRequest) (*Response, error) {
 	urlStr := n.client.requestURL("/notifications/pagerduty")
 
 	// Set the correct authentication header

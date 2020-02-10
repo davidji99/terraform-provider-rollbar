@@ -91,14 +91,14 @@ func resourceRollbarProjectAccessTokenImport(d *schema.ResourceData, meta interf
 	// To import this resource, users must pass in the project ID & access token as the 'ID'.
 	// We then proceed to set one half of the import ID as the "access_token"
 	// before generating a random string number to set as the real resource ID in state.
-	projectId, accessToken, parseErr := ParseCompositeID(d.Id())
+	projectID, accessToken, parseErr := ParseCompositeID(d.Id())
 	if parseErr != nil {
 		return nil, parseErr
 	}
 
 	var setErr error
 	setErr = d.Set("access_token", accessToken)
-	setErr = d.Set("project_id", StringToInt(projectId))
+	setErr = d.Set("project_id", StringToInt(projectID))
 	if setErr != nil {
 		return nil, setErr
 	}
@@ -230,13 +230,13 @@ func resourceRollbarProjectAccessTokenUpdate(d *schema.ResourceData, meta interf
 		return updateErr
 	}
 
-	log.Printf("Updated project access token %s", pat.GetResult().GetName())
+	log.Printf("[DEBUG] Updated project access token %s", pat.GetResult().GetName())
 
 	return resourceRollbarProjectAccessTokenRead(d, meta)
 }
 
 func resourceRollbarProjectAccessTokenDelete(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[INFO] There is no API DELETE support for project access token resource so this is a no-op. " +
+	log.Printf("[DEBUG] There is no API DELETE support for project access token resource so this is a no-op. " +
 		"Resource will be removed only from state.")
 	d.SetId("")
 
