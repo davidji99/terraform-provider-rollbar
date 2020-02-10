@@ -75,3 +75,19 @@ func (u *UsersService) ListTeams(userID int) (*TeamListResponse, *Response, erro
 
 	return result, response, getErr
 }
+
+// ListProjects lists all of a user's projects.
+//
+// Rollbar API docs: https://docs.rollbar.com/reference#list-a-users-projects
+func (u *UsersService) ListProjects(userID int) (*ProjectListResponse, *Response, error) {
+	var result *ProjectListResponse
+	urlStr := u.client.requestURL("/user/%d/projects", userID)
+
+	// Set the correct authentication header
+	u.client.setAuthTokenHeader(u.client.accountAccessToken)
+
+	// Execute the request
+	response, getErr := u.client.Get(urlStr, &result, nil)
+
+	return result, response, getErr
+}
