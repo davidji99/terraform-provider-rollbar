@@ -59,3 +59,19 @@ func (u *UsersService) Get(userID int) (*UserResponse, *Response, error) {
 
 	return result, response, getErr
 }
+
+// ListTeams lists all teams that a user is a member of.
+//
+// Rollbar API docs: https://docs.rollbar.com/reference#list-a-users-teams
+func (u *UsersService) ListTeams(userID int) (*TeamListResponse, *Response, error) {
+	var result *TeamListResponse
+	urlStr := u.client.requestURL("/user/%d/teams", userID)
+
+	// Set the correct authentication header
+	u.client.setAuthTokenHeader(u.client.accountAccessToken)
+
+	// Execute the request
+	response, getErr := u.client.Get(urlStr, &result, nil)
+
+	return result, response, getErr
+}

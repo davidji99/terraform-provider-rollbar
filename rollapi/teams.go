@@ -94,3 +94,120 @@ func (t *TeamsService) Delete(teamID int) (*Response, error) {
 
 	return response, getErr
 }
+
+// ListUsers all users for a team.
+//
+// Rollbar API docs: https://docs.rollbar.com/reference#list-a-teams-users
+func (t *TeamsService) ListUsers(teamID int) (*UserListResponse, *Response, error) {
+	var result *UserListResponse
+	urlStr := t.client.requestURL("/team/%d/users", teamID)
+
+	// Set the correct authentication header
+	t.client.setAuthTokenHeader(t.client.accountAccessToken)
+
+	// Execute the request
+	response, getErr := t.client.Get(urlStr, &result, nil)
+
+	return result, response, getErr
+}
+
+// IsUserAMember checks if a user is assigned to a team. Returns true if user is a member, false otherwise.
+//
+// Rollbar API docs: https://docs.rollbar.com/reference#check-if-a-user-is-assigned-to-a-team
+func (t *TeamsService) IsUserAMember(teamID, userID int) (bool, *Response, error) {
+	isMember := false
+	urlStr := t.client.requestURL("/team/%d/user/%d", teamID, userID)
+
+	// Set the correct authentication header
+	t.client.setAuthTokenHeader(t.client.accountAccessToken)
+
+	// Execute the request
+	response, getErr := t.client.Get(urlStr, nil, nil)
+	if getErr != nil {
+		return false, nil, getErr
+	}
+
+	// Per API documentation, the response returns a 200 if user belongs to the team
+	if response.StatusCode == 200 {
+		isMember = true
+	}
+
+	return isMember, response, nil
+}
+
+// AddUser assigns a user to team.
+//
+// Rollbar API docs: https://docs.rollbar.com/reference#assign-a-user-to-team
+func (t *TeamsService) AddUser(teamID, userID int) (bool, *Response, error) {
+	urlStr := t.client.requestURL("/team/%d/user/%d", teamID, userID)
+
+	// Set the correct authentication header
+	t.client.setAuthTokenHeader(t.client.accountAccessToken)
+
+	// Execute the request
+	response, getErr := t.client.Put(urlStr, nil, nil)
+	if getErr != nil {
+		return false, nil, getErr
+	}
+
+	return true, response, nil
+}
+
+// RemoveUser removes a user to team.
+//
+// Rollbar API docs: https://docs.rollbar.com/reference#remove-a-user-from-a-team
+func (t *TeamsService) RemoveUser(teamID, userID int) (bool, *Response, error) {
+	urlStr := t.client.requestURL("/team/%d/user/%d", teamID, userID)
+
+	// Set the correct authentication header
+	t.client.setAuthTokenHeader(t.client.accountAccessToken)
+
+	// Execute the request
+	response, getErr := t.client.Delete(urlStr, nil)
+	if getErr != nil {
+		return false, nil, getErr
+	}
+
+	return true, response, nil
+}
+
+// TeamInviteRequest represents a request to invite a user to a team.
+type TeamInviteRequest struct {
+	Email string `json:"email,omitempty"`
+}
+
+// InviteUser invites a user to the specific team, using the user's email address.
+//
+// If the email address belongs to an existing Rollbar user, they will be immediately added to the team,
+// and sent an email notification. Otherwise, an invite email will be sent,
+// containing a signup link that will allow the recipient to join the specified team.
+//
+// Rollbar API docs: https://docs.rollbar.com/reference#invite-an-email-address-to-a-team
+func (t *TeamsService) InviteUser(teamID int, opts *TeamInviteRequest) (*InvitationResponse, *Response, error) {
+	var result *InvitationResponse
+	urlStr := t.client.requestURL("/team/%d/invites", teamID)
+
+	// Set the correct authentication header
+	t.client.setAuthTokenHeader(t.client.accountAccessToken)
+
+	// Execute the request
+	response, getErr := t.client.Post(urlStr, &result, opts)
+
+	return result, response, getErr
+}
+
+// ListInvitation returns all invitations of a given team.
+//
+// Rollbar API docs: https://docs.rollbar.com/reference#list-invitations-to-a-team
+func (t *TeamsService) ListInvitation(teamID int) (*InvitationListResponse, *Response, error) {
+	var result *InvitationListResponse
+	urlStr := t.client.requestURL("/team/%d/invites", teamID)
+
+	// Set the correct authentication header
+	t.client.setAuthTokenHeader(t.client.accountAccessToken)
+
+	// Execute the request
+	response, getErr := t.client.Get(urlStr, &result, nil)
+
+	return result, response, getErr
+}
