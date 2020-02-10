@@ -16,13 +16,13 @@ type Team struct {
 
 // TeamResponse represents the response returned after getting a team.
 type TeamResponse struct {
-	ErrorCount int   `json:"err,omitempty"`
+	ErrorCount *int  `json:"err,omitempty"`
 	Result     *Team `json:"result,omitempty"`
 }
 
 // TeamListResponse represents the response returned after getting all teams.
 type TeamListResponse struct {
-	ErrorCount int     `json:"err,omitempty"`
+	ErrorCount *int    `json:"err,omitempty"`
 	Result     []*Team `json:"result,omitempty"`
 }
 
@@ -30,6 +30,24 @@ type TeamListResponse struct {
 type TeamRequest struct {
 	Name        string `json:"name,omitempty"`
 	AccessLevel string `json:"access_level,omitempty"`
+}
+
+// TeamProjectAssoc represents a team and project relationship.
+type TeamProjectAssoc struct {
+	TeamID    *int64 `json:"team_id,omitempty"`
+	ProjectID *int64 `json:"project_id,omitempty"`
+}
+
+// TeamProjectAssocListResponse represents a response when getting all of a team's projects.
+type TeamProjectAssocListResponse struct {
+	ErrorCount *int                `json:"err,omitempty"`
+	Result     []*TeamProjectAssoc `json:"result,omitempty"`
+}
+
+// TeamProjectAssocListResponse represents a response when getting  a team's project.
+type TeamProjectAssocResponse struct {
+	ErrorCount *int              `json:"err,omitempty"`
+	Result     *TeamProjectAssoc `json:"result,omitempty"`
 }
 
 // List all teams.
@@ -196,10 +214,10 @@ func (t *TeamsService) InviteUser(teamID int, opts *TeamInviteRequest) (*Invitat
 	return result, response, getErr
 }
 
-// ListInvitation returns all invitations of a given team.
+// ListInvitations returns all invitations of a given team.
 //
 // Rollbar API docs: https://docs.rollbar.com/reference#list-invitations-to-a-team
-func (t *TeamsService) ListInvitation(teamID int) (*InvitationListResponse, *Response, error) {
+func (t *TeamsService) ListInvitations(teamID int) (*InvitationListResponse, *Response, error) {
 	var result *InvitationListResponse
 	urlStr := t.client.requestURL("/team/%d/invites", teamID)
 
@@ -210,4 +228,70 @@ func (t *TeamsService) ListInvitation(teamID int) (*InvitationListResponse, *Res
 	response, getErr := t.client.Get(urlStr, &result, nil)
 
 	return result, response, getErr
+}
+
+// ListProjects returns all of a team's projects.
+//
+// Rollbar API docs: https://docs.rollbar.com/reference#list-a-teams-projects
+func (t *TeamsService) ListProjects(teamID int) (*TeamProjectAssocListResponse, *Response, error) {
+	var result *TeamProjectAssocListResponse
+	urlStr := t.client.requestURL("/team/%d/projects", teamID)
+
+	// Set the correct authentication header
+	t.client.setAuthTokenHeader(t.client.accountAccessToken)
+
+	// Execute the request
+	response, getErr := t.client.Get(urlStr, &result, nil)
+
+	return result, response, getErr
+}
+
+// AssignProject assigns a project to a team.
+//
+// Rollbar API docs: https://docs.rollbar.com/reference#assign-a-team-to-a-project
+func (t *TeamsService) AssignProject(teamID, projectID int) (*TeamProjectAssocResponse, *Response, error) {
+	var result *TeamProjectAssocResponse
+	urlStr := t.client.requestURL("/team/%d/project/%d", teamID, projectID)
+
+	// Set the correct authentication header
+	t.client.setAuthTokenHeader(t.client.accountAccessToken)
+
+	// Execute the request
+	response, getErr := t.client.Put(urlStr, &result, nil)
+
+	return result, response, getErr
+}
+
+// RemoveProject remove a project from a team.
+//
+// Rollbar API docs: https://docs.rollbar.com/reference#remove-a-team-from-a-project
+func (t *TeamsService) RemoveProject(teamID, projectID int) (*Response, error) {
+	urlStr := t.client.requestURL("/team/%d/project/%d", teamID, projectID)
+
+	// Set the correct authentication header
+	t.client.setAuthTokenHeader(t.client.accountAccessToken)
+
+	// Execute the request
+	response, getErr := t.client.Delete(urlStr, nil)
+
+	return response, getErr
+}
+
+// HasProject checks if a project is assigned to a team.
+//
+// Rollbar API docs: https://docs.rollbar.com/reference#check-if-a-team-is-assigned-to-a-project
+func (t *TeamsService) HasProject(teamID, projectID int) (bool, *Response, error) {
+	var result *TeamProjectAssocResponse
+	urlStr := t.client.requestURL("/team/%d/project/%d", teamID, projectID)
+
+	// Set the correct authentication header
+	t.client.setAuthTokenHeader(t.client.accountAccessToken)
+
+	// Execute the request
+	response, getErr := t.client.Get(urlStr, &result, nil)
+	if getErr != nil {
+		return false, response, getErr
+	}
+
+	return true, response, nil
 }

@@ -15,13 +15,13 @@ type User struct {
 
 // UserResponse represents the response returned after getting a user.
 type UserResponse struct {
-	ErrorCount int   `json:"err,omitempty"`
+	ErrorCount *int  `json:"err,omitempty"`
 	Result     *User `json:"result,omitempty"`
 }
 
 // UserListResponse represents the response returned after getting all users.
 type UserListResponse struct {
-	ErrorCount int     `json:"err,omitempty"`
+	ErrorCount *int    `json:"err,omitempty"`
 	Result     []*User `json:"result,omitempty"`
 }
 

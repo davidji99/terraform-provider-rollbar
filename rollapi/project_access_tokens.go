@@ -25,13 +25,13 @@ type ProjectAccessToken struct {
 
 // ProjectAccessTokenResponse represents the response returned after creating a new access token.
 type ProjectAccessTokenResponse struct {
-	ErrorCount int                 `json:"err,omitempty"`
+	ErrorCount *int                `json:"err,omitempty"`
 	Result     *ProjectAccessToken `json:"result,omitempty"`
 }
 
 // ProjectAccessTokenListResponse represents the response returned after getting all project access tokens.
 type ProjectAccessTokenListResponse struct {
-	ErrorCount int                   `json:"err,omitempty"`
+	ErrorCount *int                  `json:"err,omitempty"`
 	Result     []*ProjectAccessToken `json:"result,omitempty"`
 }
 
