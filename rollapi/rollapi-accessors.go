@@ -139,6 +139,25 @@ func (p *PATUpdateRequest) GetRateLimitWindowSize() int {
 	return *p.RateLimitWindowSize
 }
 
+// GetConfig returns the Config field.
+func (p *PDRuleRequest) GetConfig() *PDRuleConfig {
+	if p == nil {
+		return nil
+	}
+	return p.Config
+}
+
+// HasFilters checks if PDRuleRequest has any Filters.
+func (p *PDRuleRequest) HasFilters() bool {
+	if p == nil || p.Filters == nil {
+		return false
+	}
+	if len(p.Filters) == 0 {
+		return false
+	}
+	return true
+}
+
 // GetAccountID returns the AccountID field if it's non-nil, zero value otherwise.
 func (p *Project) GetAccountID() int64 {
 	if p == nil || p.AccountID == nil {
