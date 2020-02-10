@@ -47,9 +47,9 @@ func (u *UsersService) List() (*UserListResponse, *Response, error) {
 // This is the same information available on the "Members" page in the Rollbar UI.
 //
 // Rollbar API docs: https://docs.rollbar.com/reference#get-a-user
-func (u *UsersService) Get(userId int) (*UserResponse, *Response, error) {
+func (u *UsersService) Get(userID int) (*UserResponse, *Response, error) {
 	var result *UserResponse
-	urlStr := u.client.requestURL("/user/%d", userId)
+	urlStr := u.client.requestURL("/user/%d", userID)
 
 	// Set the correct authentication header
 	u.client.setAuthTokenHeader(u.client.accountAccessToken)

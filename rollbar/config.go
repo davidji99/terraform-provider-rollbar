@@ -21,7 +21,7 @@ func NewConfig() *Config {
 func (c *Config) initializeAPI() error {
 	authConfig := &rollapi.TokenAuthConfig{
 		AccountAccessToken: &c.accountAccessToken,
-		CustomHttpHeaders:  c.Headers,
+		CustomHTTPHeaders:  c.Headers,
 	}
 
 	api, clientInitErr := rollapi.NewClientTokenAuth(authConfig)
