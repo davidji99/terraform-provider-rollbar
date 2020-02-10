@@ -286,6 +286,14 @@ func (p *ProjectAccessToken) GetStatus() string {
 	return *p.Status
 }
 
+// GetErrorCount returns the ErrorCount field if it's non-nil, zero value otherwise.
+func (p *ProjectAccessTokenListResponse) GetErrorCount() int {
+	if p == nil || p.ErrorCount == nil {
+		return 0
+	}
+	return *p.ErrorCount
+}
+
 // HasResult checks if ProjectAccessTokenListResponse has any Result.
 func (p *ProjectAccessTokenListResponse) HasResult() bool {
 	if p == nil || p.Result == nil {
@@ -297,12 +305,28 @@ func (p *ProjectAccessTokenListResponse) HasResult() bool {
 	return true
 }
 
+// GetErrorCount returns the ErrorCount field if it's non-nil, zero value otherwise.
+func (p *ProjectAccessTokenResponse) GetErrorCount() int {
+	if p == nil || p.ErrorCount == nil {
+		return 0
+	}
+	return *p.ErrorCount
+}
+
 // GetResult returns the Result field.
 func (p *ProjectAccessTokenResponse) GetResult() *ProjectAccessToken {
 	if p == nil {
 		return nil
 	}
 	return p.Result
+}
+
+// GetErrorCount returns the ErrorCount field if it's non-nil, zero value otherwise.
+func (p *ProjectListResponse) GetErrorCount() int {
+	if p == nil || p.ErrorCount == nil {
+		return 0
+	}
+	return *p.ErrorCount
 }
 
 // HasResults checks if ProjectListResponse has any Results.
@@ -314,6 +338,14 @@ func (p *ProjectListResponse) HasResults() bool {
 		return false
 	}
 	return true
+}
+
+// GetErrorCount returns the ErrorCount field if it's non-nil, zero value otherwise.
+func (p *ProjectResponse) GetErrorCount() int {
+	if p == nil || p.ErrorCount == nil {
+		return 0
+	}
+	return *p.ErrorCount
 }
 
 // GetResult returns the Result field.
@@ -436,6 +468,14 @@ func (t *Team) GetName() string {
 	return *t.Name
 }
 
+// GetErrorCount returns the ErrorCount field if it's non-nil, zero value otherwise.
+func (t *TeamListResponse) GetErrorCount() int {
+	if t == nil || t.ErrorCount == nil {
+		return 0
+	}
+	return *t.ErrorCount
+}
+
 // HasResult checks if TeamListResponse has any Result.
 func (t *TeamListResponse) HasResult() bool {
 	if t == nil || t.Result == nil {
@@ -445,6 +485,65 @@ func (t *TeamListResponse) HasResult() bool {
 		return false
 	}
 	return true
+}
+
+// GetProjectID returns the ProjectID field if it's non-nil, zero value otherwise.
+func (t *TeamProjectAssoc) GetProjectID() int64 {
+	if t == nil || t.ProjectID == nil {
+		return 0
+	}
+	return *t.ProjectID
+}
+
+// GetTeamID returns the TeamID field if it's non-nil, zero value otherwise.
+func (t *TeamProjectAssoc) GetTeamID() int64 {
+	if t == nil || t.TeamID == nil {
+		return 0
+	}
+	return *t.TeamID
+}
+
+// GetErrorCount returns the ErrorCount field if it's non-nil, zero value otherwise.
+func (t *TeamProjectAssocListResponse) GetErrorCount() int {
+	if t == nil || t.ErrorCount == nil {
+		return 0
+	}
+	return *t.ErrorCount
+}
+
+// HasResult checks if TeamProjectAssocListResponse has any Result.
+func (t *TeamProjectAssocListResponse) HasResult() bool {
+	if t == nil || t.Result == nil {
+		return false
+	}
+	if len(t.Result) == 0 {
+		return false
+	}
+	return true
+}
+
+// GetErrorCount returns the ErrorCount field if it's non-nil, zero value otherwise.
+func (t *TeamProjectAssocResponse) GetErrorCount() int {
+	if t == nil || t.ErrorCount == nil {
+		return 0
+	}
+	return *t.ErrorCount
+}
+
+// GetResult returns the Result field.
+func (t *TeamProjectAssocResponse) GetResult() *TeamProjectAssoc {
+	if t == nil {
+		return nil
+	}
+	return t.Result
+}
+
+// GetErrorCount returns the ErrorCount field if it's non-nil, zero value otherwise.
+func (t *TeamResponse) GetErrorCount() int {
+	if t == nil || t.ErrorCount == nil {
+		return 0
+	}
+	return *t.ErrorCount
 }
 
 // GetResult returns the Result field.
@@ -495,6 +594,14 @@ func (u *User) GetUsername() string {
 	return *u.Username
 }
 
+// GetErrorCount returns the ErrorCount field if it's non-nil, zero value otherwise.
+func (u *UserListResponse) GetErrorCount() int {
+	if u == nil || u.ErrorCount == nil {
+		return 0
+	}
+	return *u.ErrorCount
+}
+
 // HasResult checks if UserListResponse has any Result.
 func (u *UserListResponse) HasResult() bool {
 	if u == nil || u.Result == nil {
@@ -504,6 +611,14 @@ func (u *UserListResponse) HasResult() bool {
 		return false
 	}
 	return true
+}
+
+// GetErrorCount returns the ErrorCount field if it's non-nil, zero value otherwise.
+func (u *UserResponse) GetErrorCount() int {
+	if u == nil || u.ErrorCount == nil {
+		return 0
+	}
+	return *u.ErrorCount
 }
 
 // GetResult returns the Result field.

@@ -19,13 +19,13 @@ type Project struct {
 
 // ProjectResponse represents the response returned after a successful GET/POST.
 type ProjectResponse struct {
-	ErrorCount int      `json:"err,omitempty"`
+	ErrorCount *int     `json:"err,omitempty"`
 	Result     *Project `json:"result,omitempty"`
 }
 
 // ProjectListResponse represents the response returned after getting all projects.
 type ProjectListResponse struct {
-	ErrorCount int        `json:"err,omitempty"`
+	ErrorCount *int       `json:"err,omitempty"`
 	Results    []*Project `json:"result,omitempty"`
 }
 
