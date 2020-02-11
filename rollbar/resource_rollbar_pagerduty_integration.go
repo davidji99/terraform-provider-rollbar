@@ -65,16 +65,16 @@ func resourceRollbarPagerDutyIntegrationCreate(d *schema.ResourceData, meta inte
 
 	log.Printf("[DEBUG] Added pagerduty integration %v", opts)
 
-	//if d.Get("delete_default_rules").(bool) {
-	//	log.Printf("[DEBUG] Deleting default rules added on service_key %s", opts.ServiceKey)
-	//
-	//	_, _, deleteErr := client.Notifications.DeleteAllPagerDutyRules()
-	//	if deleteErr != nil {
-	//		return deleteErr
-	//	}
-	//
-	//	log.Printf("[DEBUG] Deleted default rules added on service_key %s", opts.ServiceKey)
-	//}
+	if meta.(*Config).PostCreatePDIntegrationDeleteDefaultRules {
+		log.Printf("[DEBUG] Deleting default rules added on service_key %s", opts.ServiceKey)
+
+		_, _, deleteErr := client.Notifications.DeleteAllPagerDutyRules()
+		if deleteErr != nil {
+			return deleteErr
+		}
+
+		log.Printf("[DEBUG] Deleted default rules added on service_key %s", opts.ServiceKey)
+	}
 
 	// Set the resource ID to be the epoch time in nanoseconds
 	d.SetId(strconv.Itoa(time.Now().Nanosecond()))

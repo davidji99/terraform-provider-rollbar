@@ -7,10 +7,11 @@ import (
 )
 
 type Config struct {
-	API                *rollapi.Client
-	Headers            map[string]string
-	accountAccessToken string
-	projectAccessToken string
+	API                                       *rollapi.Client
+	Headers                                   map[string]string
+	accountAccessToken                        string
+	projectAccessToken                        string
+	PostCreatePDIntegrationDeleteDefaultRules bool
 }
 
 func NewConfig() *Config {
@@ -42,6 +43,8 @@ func (c *Config) applySchema(d *schema.ResourceData) (err error) {
 		}
 		c.Headers = headers
 	}
+
+	c.PostCreatePDIntegrationDeleteDefaultRules = d.Get("post_create_pd_integration_delete_default_rules").(bool)
 
 	return nil
 }

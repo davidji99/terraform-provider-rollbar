@@ -27,6 +27,12 @@ func Provider() terraform.ResourceProvider {
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("ROLLBAR_API_HEADERS", nil),
 			},
+
+			"post_create_pd_integration_delete_default_rules": {
+				Type:     schema.TypeBool,
+				Optional: true,
+				Default:  false,
+			},
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
