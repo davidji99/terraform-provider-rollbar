@@ -46,7 +46,7 @@ func testAccCheckRollbarPagerDutyIntegration_basic(key string) string {
 	return fmt.Sprintf(`
 resource "rollbar_pagerduty_integration" "foobar" {
 	service_key = "%s"
-	enabled = false
+	enabled = true
 }
 `, key)
 }

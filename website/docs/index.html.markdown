@@ -41,9 +41,13 @@ resource "rollbar_project" "service-x" {
 
 ## Authentication
 
-The Rollbar provider offers a flexible means of providing credentials for
-authentication. The following methods are supported, listed in order of
-precedence, and explained below:
+Certain resources in Rollbar require either the `account_access_token` or `project_access_token`. Based on observation,
+the `account_access_token` is used more frequently for this provider's resources. You must supply both tokens 
+if your terraform configuration code manages resources that require both access tokens. Otherwise, one access token
+must be supplied to your provider block or sourced from other means.
+
+The Rollbar provider offers a flexible means of providing credentials for authentication.
+The following methods are supported, listed in order of precedence, and explained below:
 
 * Static credentials
 * Environment variables
@@ -79,6 +83,15 @@ Refreshing Terraform state in-memory prior to plan...
 
 The following arguments are supported:
 
-* `account_access_token` - (Required) Rollbar account access token. It must be provided, but it can also
-  be sourced from [other locations](#Authentication). The provided token **MUST** have read & write permissions enabled
-  so the provider can completely manage supported resources.
+* `account_access_token` - (Required) Rollbar account access token. It can be provided, but it can also
+be sourced from [other locations](#Authentication). This token **MUST** have read & write permissions enabled
+so the provider can completely manage supported resources.
+
+* `project_access_token` - (Required) Rollbar project access token. It can be provided, but it can also
+be sourced from [other locations](#Authentication). This token **MUST** have read & write permissions enabled
+so the provider can completely manage supported resources.
+
+* `api_headers` - (Optional) Additional API headers.
+
+* `post_create_pd_integration_delete_default_rules` - (Optional) Delete the auto-added rules after enabling
+PagerDuty notification integration. Defaults to `false`.
