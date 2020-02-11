@@ -15,7 +15,7 @@ const (
 	DefaultAPIBaseURL = "https://api.rollbar.com/api/1"
 
 	// DefaultUserAgent is the user agent used when making API calls.
-	DefaultUserAgent = "go-rollbar-api"
+	DefaultUserAgent = "go-rollapi"
 
 	// RollbarAuthHeader is the Authorization header.
 	RollbarAuthHeader = "x-rollbar-access-token"
@@ -39,6 +39,7 @@ type Client struct {
 	UserAgent string
 
 	// Services used for talking to different parts of the Rollbar API.
+	Notifications       *NotificationsService
 	Projects            *ProjectsService
 	ProjectAccessTokens *ProjectAccessTokensService
 	Teams               *TeamsService
@@ -74,7 +75,7 @@ type TokenAuthConfig struct {
 // NewClientTokenAuth constructs a new client to interact with the Rollbar API using a project or account access token.
 func NewClientTokenAuth(config *TokenAuthConfig) (*Client, error) {
 	// Validate that either ProjectAccessToken or AccountAccessToken are set in TokenAuthConfig.
-	if config.GetProjectAccessToken() != "" && config.GetAccountAccessToken() != "" {
+	if config.GetProjectAccessToken() == "" && config.GetAccountAccessToken() == "" {
 		return nil, fmt.Errorf("please set an account access token and/or a project access token for authentication")
 	}
 
@@ -95,6 +96,7 @@ func NewClientTokenAuth(config *TokenAuthConfig) (*Client, error) {
 // injectServices adds the services to the client.
 func (c *Client) injectServices() {
 	c.common.client = c
+	c.Notifications = (*NotificationsService)(&c.common)
 	c.Projects = (*ProjectsService)(&c.common)
 	c.ProjectAccessTokens = (*ProjectAccessTokensService)(&c.common)
 	c.Teams = (*TeamsService)(&c.common)
@@ -144,10 +146,12 @@ func (c *Client) Get(url string, v, body interface{}) (*Response, error) {
 
 // Post executes a POST http request.
 func (c *Client) Post(url string, v, body interface{}) (*Response, error) {
-	resp, err := c.http.R().SetResult(v).
-		SetBody(body).
-		Post(url)
+	req := c.http.R().SetBody(body)
 
+	if v != nil {
+		req.SetResult(v)
+	}
+	resp, err := req.Post(url)
 	if err != nil {
 		return nil, err
 	}
@@ -168,9 +172,12 @@ func (c *Client) Delete(url string, v interface{}) (*Response, error) {
 
 // Patch executes a PATCH http request.
 func (c *Client) Patch(url string, v, body interface{}) (*Response, error) {
-	resp, err := c.http.R().SetResult(v).
-		SetBody(body).
-		Patch(url)
+	req := c.http.R().SetBody(body)
+
+	if v != nil {
+		req.SetResult(v)
+	}
+	resp, err := req.Patch(url)
 	if err != nil {
 		return nil, err
 	}
@@ -180,9 +187,12 @@ func (c *Client) Patch(url string, v, body interface{}) (*Response, error) {
 
 // Put executes a PUT http request.
 func (c *Client) Put(url string, v, body interface{}) (*Response, error) {
-	resp, err := c.http.R().SetResult(v).
-		SetBody(body).
-		Put(url)
+	req := c.http.R().SetBody(body)
+
+	if v != nil {
+		req.SetResult(v)
+	}
+	resp, err := req.Put(url)
 	if err != nil {
 		return nil, err
 	}

@@ -66,14 +66,14 @@ func resourceRollbarTeamCreate(d *schema.ResourceData, meta interface{}) error {
 		opts.AccessLevel = vs
 	}
 
-	log.Printf("Creating new team %s", opts.Name)
+	log.Printf("[DEBUG] Creating new team %s", opts.Name)
 
 	newTeam, _, createErr := client.Teams.Create(opts)
 	if createErr != nil {
 		return createErr
 	}
 
-	log.Printf("Created new team %s", opts.Name)
+	log.Printf("[DEBUG] Created new team %s", opts.Name)
 
 	d.SetId(Int64ToString(newTeam.GetResult().GetID()))
 
@@ -99,7 +99,7 @@ func resourceRollbarTeamRead(d *schema.ResourceData, meta interface{}) error {
 func resourceRollbarTeamDelete(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*Config).API
 
-	log.Printf("Team id to be deleted: %v", d.Id())
+	log.Printf("[DEBUG] Team id to be deleted: %v", d.Id())
 
 	_, deleteErr := client.Teams.Delete(StringToInt(d.Id()))
 	if deleteErr != nil {

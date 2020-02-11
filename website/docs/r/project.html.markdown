@@ -10,7 +10,7 @@ description: |-
 
 This resource is used to create and manage projects on Rollbar.
 
-**NOTE:** The Rollbar API does not support updating existing projects, only through the UI.
+~> NOTE: The Rollbar API does not support updating existing projects, only through the UI.
 Therefore, you must update your configuration file(s) for this resource if you manually updated
 the project name. Otherwise, your `terraform plan` will detect if a difference between the state file and remote.
 
