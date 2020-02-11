@@ -8,7 +8,7 @@ description: |-
 
 # rollbar\_pagerduty\_integration
 
-This resource is used manage Rollbar's integration with PagerDuty. You must supply a `project_access_token` with write
+This resource is used to manage Rollbar's integration with PagerDuty. You must supply a `project_access_token` with write
 permissions in other to manage this resource.
 
 ~> NOTE: Due to API limitations, it is not possible to delete/remove the integration via the API.
@@ -22,7 +22,7 @@ resource cannot import existing rules due to API limitations.
 ## Example Usage
 
 ```hcl
-# Create a new Rollbar project
+# Create a new Rollbar PagerDuty Integration
 resource "rollbar_pagerduty_integration" "pd" {
 	service_key = "SOME_VALID_PD_KEY"
 	enabled = true

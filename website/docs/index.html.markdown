@@ -94,4 +94,5 @@ so the provider can completely manage supported resources.
 * `api_headers` - (Optional) Additional API headers.
 
 * `post_create_pd_integration_delete_default_rules` - (Optional) Delete the auto-added rules after enabling
-PagerDuty notification integration. Defaults to `false`.
+PagerDuty notification integration. Defaults to `false`. If you have existing rules that you wish to keep, do not set this
+attribute to `true`.
