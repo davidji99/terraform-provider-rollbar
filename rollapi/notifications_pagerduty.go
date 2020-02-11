@@ -25,6 +25,7 @@ type PDRuleFilter struct {
 	Type      string `json:"type,omitempty"`
 	Operation string `json:"operation,omitempty"`
 	Value     string `json:"value,omitempty"`
+	Path      string `json:"path,omitempty"`
 }
 
 // PDRuleConfig represents the configuration options available on a rule.
@@ -54,6 +55,9 @@ func (n *NotificationsService) ConfigurePagerDutyIntegration(opts *PDIntegration
 //
 // Requires a project access token.
 // (The API documentation is wrong regarding which documentation to use as of Feb. 10th, 2020.)
+//
+// Additionally, if you construct a request body that has an empty array for filters or is missing entirely,
+// a default rule is created: 'trigger in any environment where level >= debug'.
 //
 // Rollbar API docs: https://docs.rollbar.com/reference#setup-pagerduty-notification-rules
 func (n *NotificationsService) ModifyPagerDutyRules(opts []*PDRuleRequest) (bool, *Response, error) {

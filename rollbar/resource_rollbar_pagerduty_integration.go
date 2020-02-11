@@ -56,14 +56,14 @@ func resourceRollbarPagerDutyIntegrationCreate(d *schema.ResourceData, meta inte
 	log.Printf("[DEBUG] enabled is : %v", vs)
 	opts.Enabled = &vs
 
-	log.Printf("[DEBUG] Adding pagerduty integration %v", opts)
+	log.Printf("[DEBUG] Adding PagerDuty integration %v", opts)
 
 	_, createErr := client.Notifications.ConfigurePagerDutyIntegration(opts)
 	if createErr != nil {
 		return createErr
 	}
 
-	log.Printf("[DEBUG] Added pagerduty integration %v", opts)
+	log.Printf("[DEBUG] Added PagerDuty integration %v", opts)
 
 	if meta.(*Config).PostCreatePDIntegrationDeleteDefaultRules {
 		log.Printf("[DEBUG] Deleting default rules added on service_key %s", opts.ServiceKey)
@@ -101,14 +101,14 @@ func resourceRollbarPagerDutyIntegrationDelete(d *schema.ResourceData, meta inte
 	e := false
 	opts.Enabled = &e
 
-	log.Printf("[DEBUG] Disabling pagerduty integration %v", opts)
+	log.Printf("[DEBUG] Disabling PagerDuty integration %v", opts)
 
 	_, createErr := client.Notifications.ConfigurePagerDutyIntegration(opts)
 	if createErr != nil {
 		return createErr
 	}
 
-	log.Printf("[DEBUG] Disabled pagerduty integration %v", opts)
+	log.Printf("[DEBUG] Disabled PagerDuty integration %v", opts)
 
 	d.SetId("")
 

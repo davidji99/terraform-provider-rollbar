@@ -29,7 +29,7 @@ that cannot be resolved by any terraform `apply`.
 ## Example Usage
 
 ```hcl
-# Create a new Rollbar project
+# Create a new Rollbar project access token
 resource "rollbar_project" "foobar" {
 	name = "new_project"
 }
