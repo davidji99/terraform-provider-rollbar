@@ -32,7 +32,7 @@ func TestAccDatasourceRollbarTeam_Basic(t *testing.T) {
 	})
 }
 
-func testAccCheckRollbarTeamWithDatasourceBasic(appName string) string {
+func testAccCheckRollbarTeamWithDatasourceBasic(name string) string {
 	return fmt.Sprintf(`
 resource "rollbar_team" "foobar" {
 	name = "%s"
@@ -40,7 +40,7 @@ resource "rollbar_team" "foobar" {
 }
 
 data "rollbar_team" "foobar" {
-  id = "${rollbar_team.foobar.id}"
+  id = rollbar_team.foobar.id
 }
-`, appName)
+`, name)
 }
