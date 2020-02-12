@@ -58,10 +58,47 @@ type ProjectRequest struct {
 	Name string `json:"name,omitempty"`
 }
 
-// List all projects.
+// List all non-deleted projects.
+//
+// By default, the API returns all a list of deleted and active projects. If you wish to see deleted projects,
+// please use the ListAll() function.
 //
 // Rollbar API docs: https://docs.rollbar.com/reference#list-all-projects
 func (p *ProjectsService) List() (*ProjectListResponse, *Response, error) {
+	var result *ProjectListResponse
+	urlStr := p.client.requestURL("/projects")
+
+	// Set the correct authentication header
+	p.client.setAuthTokenHeader(p.client.accountAccessToken)
+
+	// Execute the request
+	response, getErr := p.client.Get(urlStr, &result, nil)
+	if getErr != nil {
+		return nil, nil, getErr
+	}
+
+	// If there are any results, iterate through them and get only the active projects.
+	if len(result.Results) > 0 {
+		var activeProjects []*Project
+		for _, project := range result.Results {
+			if project.GetName() != "" {
+				activeProjects = append(activeProjects, project)
+			}
+		}
+
+		result.Results = activeProjects
+	}
+
+	return result, response, nil
+}
+
+// List all projects, including deleted ones.
+//
+// By default, the API returns all a list of deleted and active projects. If you wish to see only active projects,
+// please use the List() function.
+//
+// Rollbar API docs: https://docs.rollbar.com/reference#list-all-projects
+func (p *ProjectsService) ListAll() (*ProjectListResponse, *Response, error) {
 	var result *ProjectListResponse
 	urlStr := p.client.requestURL("/projects")
 
