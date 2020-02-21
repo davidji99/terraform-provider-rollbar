@@ -20,11 +20,13 @@ If you need a higher rate limit, please contact support@rollbar.com.
 
 **NOTE:** As of (Feb. 9th, 2020), the Rollbar API does not provide support for the following and therefore cannot
 be implemented in the provider:
-1. Deletion of access tokens. Users will need to delete the token via the UI after a `terraform destroy`. The resource
+1. Deleting access tokens. Users will need to delete the token via the UI after a `terraform destroy`. The resource
 will only be removed from your state after resource destruction.
-1. Updates to a project access token's `name`, `status`, and `scopes`. Users will need to make updates via the UI
+1. Updating a project access token's `name`, `status`, and `scopes`. Users will need to make updates via the UI
 and then update their terraform configuration prior to a `plan` or `apply`. Otherwise, terraform will detect a diff
 that cannot be resolved by any terraform `apply`.
+
+Please also note that a project, by default, comes with four project access tokens each only have one of the four scopes. If you wish to use those tokens instead of creating new ones, it is recommended to use the `rollbar_project_access_tokens` data source.
 
 ## Example Usage
 
