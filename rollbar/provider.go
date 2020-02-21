@@ -44,9 +44,9 @@ func Provider() terraform.ResourceProvider {
 		},
 
 		DataSourcesMap: map[string]*schema.Resource{
-			"rollbar_project_access_token": dataSourceRollbarProjectAccessToken(),
-			"rollbar_team":                 dataSourceRollbarTeam(),
-			"rollbar_user":                 dataSourceRollbarUser(),
+			"rollbar_project_access_tokens": dataSourceRollbarProjectAccessTokens(),
+			"rollbar_team":                  dataSourceRollbarTeam(),
+			"rollbar_user":                  dataSourceRollbarUser(),
 		},
 
 		ConfigureFunc: providerConfigure,

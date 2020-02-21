@@ -2,9 +2,9 @@ package rollbar
 
 import "github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 
-func dataSourceRollbarProjectAccessToken() *schema.Resource {
+func dataSourceRollbarProjectAccessTokens() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceRollbarProjectAccessTokenRead,
+		Read: dataSourceRollbarProjectAccessTokensRead,
 		Schema: map[string]*schema.Schema{
 			"project_id": {
 				Type:     schema.TypeInt,
@@ -21,7 +21,7 @@ func dataSourceRollbarProjectAccessToken() *schema.Resource {
 	}
 }
 
-func dataSourceRollbarProjectAccessTokenRead(d *schema.ResourceData, m interface{}) error {
+func dataSourceRollbarProjectAccessTokensRead(d *schema.ResourceData, m interface{}) error {
 	d.SetId(GenerateRandomResourceID())
 
 	client := m.(*Config).API
