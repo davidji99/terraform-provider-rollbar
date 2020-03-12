@@ -1,6 +1,7 @@
 package rollbar
 
 import "github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+import fmt "fmt"
 
 func dataSourceRollbarProject() *schema.Resource {
 	return &schema.Resource{
@@ -43,13 +44,14 @@ func dataSourceRollbarProjectRead(d *schema.ResourceData, m interface{}) error {
 		for _, project := range result.Results {
 			if project.GetName() == name {
 				d.SetId(Int64ToString(project.GetID()))
-				d.Set("status", project.GetStatus())
-				d.Set("account_id", project.GetAccountID())
-				return nil
+
+				var setErr error
+				setErr = d.Set("status", project.GetStatus())
+				setErr = d.Set("account_id", project.GetAccountID())
+				return setErr
 			}
 		}
 	}
 
-	d.SetId("")
-	return nil
+	return fmt.Errorf("no matches found for name: %s", d.Get("name").(string))
 }
