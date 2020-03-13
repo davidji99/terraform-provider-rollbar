@@ -35,19 +35,19 @@ func Provider() terraform.ResourceProvider {
 			},
 		},
 
+		DataSourcesMap: map[string]*schema.Resource{
+			"rollbar_project":               dataSourceRollbarProject(),
+			"rollbar_project_access_tokens": dataSourceRollbarProjectAccessTokens(),
+			"rollbar_team":                  dataSourceRollbarTeam(),
+			"rollbar_user":                  dataSourceRollbarUser(),
+		},
+
 		ResourcesMap: map[string]*schema.Resource{
 			"rollbar_pagerduty_integration":       resourceRollbarPagerDutyIntegration(),
 			"rollbar_pagerduty_notification_rule": resourceRollbarPagerDutyNotificationRule(),
 			"rollbar_project":                     resourceRollbarProject(),
 			"rollbar_project_access_token":        resourceRollbarProjectAccessToken(),
 			"rollbar_team":                        resourceRollbarTeam(),
-		},
-
-		DataSourcesMap: map[string]*schema.Resource{
-			"rollbar_project_access_tokens": dataSourceRollbarProjectAccessTokens(),
-			"rollbar_project":               dataSourceRollbarProject(),
-			"rollbar_team":                  dataSourceRollbarTeam(),
-			"rollbar_user":                  dataSourceRollbarUser(),
 		},
 
 		ConfigureFunc: providerConfigure,
