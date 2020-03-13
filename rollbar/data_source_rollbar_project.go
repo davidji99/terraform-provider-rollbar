@@ -7,14 +7,14 @@ func dataSourceRollbarProject() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceRollbarProjectRead,
 		Schema: map[string]*schema.Schema{
-			"id": {
-				Type:     schema.TypeString,
-				Computed: true,
-			},
-
 			"name": {
 				Type:     schema.TypeString,
 				Required: true,
+			},
+
+			"id": {
+				Type:     schema.TypeString,
+				Computed: true,
 			},
 
 			"status": {
@@ -48,10 +48,11 @@ func dataSourceRollbarProjectRead(d *schema.ResourceData, m interface{}) error {
 				var setErr error
 				setErr = d.Set("status", project.GetStatus())
 				setErr = d.Set("account_id", project.GetAccountID())
+				setErr = d.Set("name", project.GetName())
 				return setErr
 			}
 		}
 	}
 
-	return fmt.Errorf("no matches found for name: %s", d.Get("name").(string))
+	return fmt.Errorf("no matches found for project name: %s", name)
 }
