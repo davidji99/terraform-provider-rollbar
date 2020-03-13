@@ -32,12 +32,16 @@ $ make testacc TEST="./rollbar/" TESTARGS='-run=RollbarProject'
 The following parameters are available for running the test. The absence of some of the non-required parameters will cause certain tests to be skipped.
 
 * **TF_ACC** (`integer`) **Required** - must be set to `1`.
-* **ROLLBAR_ACCOUNT_ACCESS_TOKEN** (`string`) **Required** - The account access token of the user running the test.
+* **ROLLBAR_ACCOUNT_ACCESS_TOKEN** (`string`) - The account access token of the user running the test.
+* **ROLLBAR_PROJECT_ACCESS_TOKEN** (`string`) - The account access token of the user running the test.
 
-For example:
+Please note: if you run the entire acceptance suite, you will need to set BOTH `ROLLBAR_ACCOUNT_ACCESS_TOKEN` & `ROLLBAR_PROJECT_ACCESS_TOKEN`.
+Otherwise, certain tests require either token.
 
+**For example:**
 ```bash
 export TF_ACC=...
 export ROLLBAR_ACCOUNT_ACCESS_TOKEN=...
+export ROLLBAR_PROJECT_ACCESS_TOKEN=...
 $ make testacc TEST="./rollbar/" 2>&1 | tee test.log
 ```
