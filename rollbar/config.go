@@ -22,7 +22,7 @@ func NewConfig() *Config {
 }
 
 func (c *Config) initializeAPI() error {
-	userAgent := fmt.Sprintf("terraform-provider-refocus/v%s", version.ProviderVersion)
+	userAgent := fmt.Sprintf("terraform-provider-rollbar/v%s", version.ProviderVersion)
 
 	api, clientInitErr := rollrest.New(rollrest.AuthAAT(c.accountAccessToken), rollrest.AuthPAT(c.projectAccessToken),
 		rollrest.CustomHTTPHeaders(c.Headers), rollrest.UserAgent(userAgent))
