@@ -58,9 +58,15 @@ github.com/bgentry/go-netrc/netrc
 github.com/bgentry/speakeasy
 # github.com/davecgh/go-spew v1.1.1
 github.com/davecgh/go-spew/spew
+# github.com/davidji99/go-querystring v1.0.2
+github.com/davidji99/go-querystring/query
+# github.com/davidji99/rollrest-go v0.1.1
+github.com/davidji99/rollrest-go/rollrest
+# github.com/davidji99/simpleresty v0.2.1
+github.com/davidji99/simpleresty
 # github.com/fatih/color v1.7.0
 github.com/fatih/color
-# github.com/go-resty/resty/v2 v2.1.0
+# github.com/go-resty/resty/v2 v2.2.0
 github.com/go-resty/resty/v2
 # github.com/golang/protobuf v1.3.2
 github.com/golang/protobuf/proto
@@ -75,8 +81,6 @@ github.com/google/go-cmp/cmp/internal/diff
 github.com/google/go-cmp/cmp/internal/flags
 github.com/google/go-cmp/cmp/internal/function
 github.com/google/go-cmp/cmp/internal/value
-# github.com/google/go-querystring v1.0.0
-github.com/google/go-querystring/query
 # github.com/google/uuid v1.1.1
 github.com/google/uuid
 # github.com/googleapis/gax-go/v2 v2.0.5
@@ -268,7 +272,7 @@ golang.org/x/crypto/openpgp/packet
 golang.org/x/crypto/openpgp/s2k
 golang.org/x/crypto/poly1305
 golang.org/x/crypto/ssh
-# golang.org/x/net v0.0.0-20191009170851-d66e71096ffb
+# golang.org/x/net v0.0.0-20200222125558-5a598a2470a0
 golang.org/x/net/context
 golang.org/x/net/context/ctxhttp
 golang.org/x/net/http/httpguts
