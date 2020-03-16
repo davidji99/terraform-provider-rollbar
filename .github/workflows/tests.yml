@@ -1,5 +1,5 @@
 name: tests
-on: [push, pull_request]
+on: [pull_request]
 env:
   GO111MODULE: on
 
@@ -7,7 +7,7 @@ jobs:
   test:
     strategy:
       matrix:
-        go-version: [1.12.x, 1.13.x]
+        go-version: [1.12.x, 1.13.x, 1.14.x]
         platform: [ubuntu-latest]
     runs-on: ${{ matrix.platform }}
     
@@ -35,11 +35,6 @@ jobs:
       
       - name: Run make test
         run: make test
-      
-      - name: Ensure go run gen-accessors produces a zero diff
-        shell: bash
-        run: |
-          cd rollapi
-          go run gen-accessors.go
-          git diff --exit-code; code=$?; git checkout -- .; (exit $code)
-      
+
+      - name: Run make build
+        run: make build

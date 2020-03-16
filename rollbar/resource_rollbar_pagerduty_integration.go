@@ -2,7 +2,7 @@ package rollbar
 
 import (
 	"fmt"
-	"github.com/davidji99/terraform-provider-rollbar/rollapi"
+	"github.com/davidji99/rollrest-go/rollrest"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	"log"
@@ -44,7 +44,7 @@ func resourceRollbarPagerDutyIntegrationImport(d *schema.ResourceData, meta inte
 
 func resourceRollbarPagerDutyIntegrationCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*Config).API
-	opts := &rollapi.PDIntegrationRequest{}
+	opts := &rollrest.PDIntegrationRequest{}
 
 	if v, ok := d.GetOk("service_key"); ok {
 		vs := v.(string)
@@ -54,7 +54,7 @@ func resourceRollbarPagerDutyIntegrationCreate(d *schema.ResourceData, meta inte
 
 	vs := d.Get("enabled").(bool)
 	log.Printf("[DEBUG] enabled is : %v", vs)
-	opts.Enabled = &vs
+	opts.Enabled = vs
 
 	log.Printf("[DEBUG] Adding PagerDuty integration %v", opts)
 
@@ -95,11 +95,10 @@ func resourceRollbarPagerDutyIntegrationDelete(d *schema.ResourceData, meta inte
 	// There is no DELETE API endpoint so resource deletion will entail disabling the integration.
 	// Users will need to visit the UI to manually remove the integration.
 	client := meta.(*Config).API
-	opts := &rollapi.PDIntegrationRequest{}
+	opts := &rollrest.PDIntegrationRequest{}
 
 	opts.ServiceKey = d.Get("service_key").(string)
-	e := false
-	opts.Enabled = &e
+	opts.Enabled = false
 
 	log.Printf("[DEBUG] Disabling PagerDuty integration %v", opts)
 

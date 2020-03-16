@@ -1,11 +1,14 @@
-package rollapi
+package rollrest
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/davidji99/simpleresty"
+)
 
 // ProjectAccessTokensService handles communication with the project access token related
 // methods of the Rollbar API.
 //
-// Rollbar API docs: https://docs.rollbar.com/reference#project-access-tokens
+// Rollbar API docs: https://explorer.docs.rollbar.com/#tag/Project-Access-Tokens
 type ProjectAccessTokensService service
 
 // ProjectAccessToken represents a project access token.
@@ -14,8 +17,8 @@ type ProjectAccessToken struct {
 	AccessToken                 *string  `json:"access_token,omitempty"`
 	Name                        *string  `json:"name,omitempty"`
 	Status                      *string  `json:"status,omitempty"`
-	RateLimitWindowSize         *int64   `json:"rate_limit_window_size,omitempty"`
-	RateLimitWindowCount        *int64   `json:"rate_limit_window_count,omitempty"`
+	RateLimitWindowSize         *int     `json:"rate_limit_window_size,omitempty"`
+	RateLimitWindowCount        *int     `json:"rate_limit_window_count,omitempty"`
 	CurrentRateLimitWindowStart *int64   `json:"cur_rate_limit_window_start,omitempty"`
 	CurrentRateLimitWindowCount *int64   `json:"cur_rate_limit_window_count,omitempty"`
 	DataCreated                 *int64   `json:"date_created,omitempty"`
@@ -40,28 +43,30 @@ type PATCreateRequest struct {
 	Name                 string   `json:"name,omitempty"`
 	Scopes               []string `json:"scopes,omitempty"`
 	Status               string   `json:"status,omitempty"`
-	RateLimitWindowSize  *int     `json:"rate_limit_window_size,omitempty"`
-	RateLimitWindowCount *int     `json:"rate_limit_window_count,omitempty"`
+	RateLimitWindowSize  int      `json:"rate_limit_window_size,omitempty"`
+	RateLimitWindowCount int      `json:"rate_limit_window_count,omitempty"`
 }
 
 // PATUpdateRequest represents a request to update a project access token.
+//
+// Both RateLimitWindowSize and RateLimitWindowCount need to be set.
 type PATUpdateRequest struct {
-	RateLimitWindowSize  *int `json:"rate_limit_window_size,omitempty"`
-	RateLimitWindowCount *int `json:"rate_limit_window_count,omitempty"`
+	RateLimitWindowSize  int `json:"rate_limit_window_size,omitempty"`
+	RateLimitWindowCount int `json:"rate_limit_window_count,omitempty"`
 }
 
 // List all of a project's access tokens.
 //
-// Rollbar API docs: https://docs.rollbar.com/reference#list-all-project-access-tokens
-func (p *ProjectAccessTokensService) List(projectID int) (*ProjectAccessTokenListResponse, *Response, error) {
+// Rollbar API docs: https://explorer.docs.rollbar.com/#operation/list-all-project-access-tokens
+func (p *ProjectAccessTokensService) List(projectID int) (*ProjectAccessTokenListResponse, *simpleresty.Response, error) {
 	var result *ProjectAccessTokenListResponse
-	urlStr := p.client.requestURL("/project/%d/access_tokens", projectID)
+	urlStr := p.client.http.RequestURL("/project/%d/access_tokens", projectID)
 
 	// Set the correct authentication header
 	p.client.setAuthTokenHeader(p.client.accountAccessToken)
 
 	// Execute the request
-	response, getErr := p.client.Get(urlStr, &result, nil)
+	response, getErr := p.client.http.Get(urlStr, &result, nil)
 
 	return result, response, getErr
 }
@@ -70,10 +75,10 @@ func (p *ProjectAccessTokensService) List(projectID int) (*ProjectAccessTokenLis
 //
 // We don't want to use the actual access token.
 //
-// Also as no endpoint officially exists, this function will first fetch all of a project's access token
+// Also since no endpoint officially exists, this method will first fetch all of a project's access token
 // and iterate through each token to find the specified one.
-func (p *ProjectAccessTokensService) Get(projectID int, accessToken string) (*ProjectAccessToken, *Response, error) {
-	projects, _, listErr := p.List(projectID)
+func (p *ProjectAccessTokensService) Get(projectID int, accessToken string) (*ProjectAccessToken, *simpleresty.Response, error) {
+	projects, response, listErr := p.List(projectID)
 	if listErr != nil {
 		return nil, nil, listErr
 	}
@@ -87,47 +92,41 @@ func (p *ProjectAccessTokensService) Get(projectID int, accessToken string) (*Pr
 	}
 
 	if targetProject == nil {
-		return nil, nil, fmt.Errorf("not found")
+		return nil, response, fmt.Errorf("specified project access token not found")
 	}
 
-	return targetProject, nil, nil
+	return targetProject, response, nil
 }
 
 // Create a project access token.
 //
-// Rollbar API docs: https://docs.rollbar.com/reference#create-a-project-access-token
-func (p *ProjectAccessTokensService) Create(projectID int, opts *PATCreateRequest) (*ProjectAccessTokenResponse, *Response, error) {
+// Rollbar API docs: https://explorer.docs.rollbar.com/#operation/create-a-project-access-token
+func (p *ProjectAccessTokensService) Create(projectID int, opts *PATCreateRequest) (*ProjectAccessTokenResponse, *simpleresty.Response, error) {
 	var result *ProjectAccessTokenResponse
-	urlStr := p.client.requestURL("/project/%d/access_tokens", projectID)
+	urlStr := p.client.http.RequestURL("/project/%d/access_tokens", projectID)
 
 	// Set the correct authentication header
 	p.client.setAuthTokenHeader(p.client.accountAccessToken)
 
 	// Execute the request
-	response, getErr := p.client.Post(urlStr, &result, opts)
+	response, getErr := p.client.http.Post(urlStr, &result, opts)
 
 	return result, response, getErr
 }
 
 // Update a project access token.
 //
-// Rollbar API docs: https://docs.rollbar.com/reference#update-a-rate-limit
+// Rollbar API docs: https://explorer.docs.rollbar.com/#operation/update-a-rate-limit
 func (p *ProjectAccessTokensService) Update(projectID int, accessToken string,
-	opts *PATUpdateRequest) (*ProjectAccessTokenResponse, *Response, error) {
-	// API requires RateLimitWindowSize and RateLimitWindowCount to be both set in the request body so validate this first.
-	if opts.RateLimitWindowSize == nil || opts.RateLimitWindowCount == nil {
-		return nil, nil, fmt.Errorf("both rate_limit_window_size & rate_limit_window_count " +
-			"must be set in the request body")
-	}
-
+	opts *PATUpdateRequest) (*ProjectAccessTokenResponse, *simpleresty.Response, error) {
 	var result *ProjectAccessTokenResponse
-	urlStr := p.client.requestURL("/project/%d/access_token/%s", projectID, accessToken)
+	urlStr := p.client.http.RequestURL("/project/%d/access_token/%s", projectID, accessToken)
 
 	// Set the correct authentication header
 	p.client.setAuthTokenHeader(p.client.accountAccessToken)
 
 	// Execute the request
-	response, getErr := p.client.Patch(urlStr, &result, opts)
+	response, getErr := p.client.http.Patch(urlStr, &result, opts)
 
 	return result, response, getErr
 }

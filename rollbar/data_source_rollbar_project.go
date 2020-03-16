@@ -40,8 +40,8 @@ func dataSourceRollbarProjectRead(d *schema.ResourceData, m interface{}) error {
 		return err
 	}
 
-	if result.HasResults() {
-		for _, project := range result.Results {
+	if result.HasResult() {
+		for _, project := range result.Result {
 			if project.GetName() == name {
 				d.SetId(Int64ToString(project.GetID()))
 

@@ -1,9 +1,11 @@
-package rollapi
+package rollrest
+
+import "github.com/davidji99/simpleresty"
 
 // ProjectsService handles communication with the project related
 // methods of the Rollbar API.
 //
-// Rollbar API docs: https://docs.rollbar.com/reference#projects
+// Rollbar API docs: https://explorer.docs.rollbar.com/#tag/Projects
 type ProjectsService service
 
 // Project represents a rollbar project.
@@ -26,7 +28,7 @@ type ProjectResponse struct {
 // ProjectListResponse represents the response returned after getting all projects.
 type ProjectListResponse struct {
 	ErrorCount *int       `json:"err,omitempty"`
-	Results    []*Project `json:"result,omitempty"`
+	Result     []*Project `json:"result,omitempty"`
 }
 
 // ProjectSD represents a project's settings data.
@@ -63,30 +65,30 @@ type ProjectRequest struct {
 // By default, the API returns all a list of deleted and active projects. If you wish to see deleted projects,
 // please use the ListAll() function.
 //
-// Rollbar API docs: https://docs.rollbar.com/reference#list-all-projects
-func (p *ProjectsService) List() (*ProjectListResponse, *Response, error) {
+// Rollbar API docs: https://explorer.docs.rollbar.com/#operation/list-all-projects
+func (p *ProjectsService) List() (*ProjectListResponse, *simpleresty.Response, error) {
 	var result *ProjectListResponse
-	urlStr := p.client.requestURL("/projects")
+	urlStr := p.client.http.RequestURL("/projects")
 
 	// Set the correct authentication header
 	p.client.setAuthTokenHeader(p.client.accountAccessToken)
 
 	// Execute the request
-	response, getErr := p.client.Get(urlStr, &result, nil)
+	response, getErr := p.client.http.Get(urlStr, &result, nil)
 	if getErr != nil {
 		return nil, nil, getErr
 	}
 
 	// If there are any results, iterate through them and get only the active projects.
-	if len(result.Results) > 0 {
+	if len(result.Result) > 0 {
 		var activeProjects []*Project
-		for _, project := range result.Results {
+		for _, project := range result.Result {
 			if project.GetName() != "" {
 				activeProjects = append(activeProjects, project)
 			}
 		}
 
-		result.Results = activeProjects
+		result.Result = activeProjects
 	}
 
 	return result, response, nil
@@ -97,63 +99,63 @@ func (p *ProjectsService) List() (*ProjectListResponse, *Response, error) {
 // By default, the API returns all a list of deleted and active projects. If you wish to see only active projects,
 // please use the List() function.
 //
-// Rollbar API docs: https://docs.rollbar.com/reference#list-all-projects
-func (p *ProjectsService) ListAll() (*ProjectListResponse, *Response, error) {
+// Rollbar API docs: https://explorer.docs.rollbar.com/#operation/list-all-projects
+func (p *ProjectsService) ListAll() (*ProjectListResponse, *simpleresty.Response, error) {
 	var result *ProjectListResponse
-	urlStr := p.client.requestURL("/projects")
+	urlStr := p.client.http.RequestURL("/projects")
 
 	// Set the correct authentication header
 	p.client.setAuthTokenHeader(p.client.accountAccessToken)
 
 	// Execute the request
-	response, getErr := p.client.Get(urlStr, &result, nil)
+	response, getErr := p.client.http.Get(urlStr, &result, nil)
 
 	return result, response, getErr
 }
 
 // Get a single project.
 //
-// Rollbar API docs: https://docs.rollbar.com/reference#get-a-project
-func (p *ProjectsService) Get(id int) (*ProjectResponse, *Response, error) {
+// Rollbar API docs: https://explorer.docs.rollbar.com/#operation/get-a-project
+func (p *ProjectsService) Get(id int) (*ProjectResponse, *simpleresty.Response, error) {
 	var result *ProjectResponse
-	urlStr := p.client.requestURL("/project/%d", id)
+	urlStr := p.client.http.RequestURL("/project/%d", id)
 
 	// Set the correct authentication header
 	p.client.setAuthTokenHeader(p.client.accountAccessToken)
 
 	// Execute the request
-	response, getErr := p.client.Get(urlStr, &result, nil)
+	response, getErr := p.client.http.Get(urlStr, &result, nil)
 
 	return result, response, getErr
 }
 
 // Create a single project.
 //
-// Rollbar API docs: https://docs.rollbar.com/reference#create-a-project
-func (p *ProjectsService) Create(opts *ProjectRequest) (*ProjectResponse, *Response, error) {
+// Rollbar API docs: https://explorer.docs.rollbar.com/#operation/create-a-project
+func (p *ProjectsService) Create(opts *ProjectRequest) (*ProjectResponse, *simpleresty.Response, error) {
 	var result *ProjectResponse
-	urlStr := p.client.requestURL("/projects")
+	urlStr := p.client.http.RequestURL("/projects")
 
 	// Set the correct authentication header
 	p.client.setAuthTokenHeader(p.client.accountAccessToken)
 
 	// Execute the request
-	response, getErr := p.client.Post(urlStr, &result, opts)
+	response, getErr := p.client.http.Post(urlStr, &result, opts)
 
 	return result, response, getErr
 }
 
 // Delete an existing project.
 //
-// Rollbar API docs: https://docs.rollbar.com/reference#delete-a-project
-func (p *ProjectsService) Delete(id int) (*Response, error) {
-	urlStr := p.client.requestURL("/project/%d", id)
+// Rollbar API docs: https://explorer.docs.rollbar.com/#operation/delete-a-project
+func (p *ProjectsService) Delete(id int) (*simpleresty.Response, error) {
+	urlStr := p.client.http.RequestURL("/project/%d", id)
 
 	// Set the correct authentication header
 	p.client.setAuthTokenHeader(p.client.accountAccessToken)
 
 	// Execute the request
-	response, getErr := p.client.Delete(urlStr, nil)
+	response, getErr := p.client.http.Delete(urlStr, nil, nil)
 
 	return response, getErr
 }

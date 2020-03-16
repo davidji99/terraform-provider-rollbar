@@ -2,7 +2,7 @@ package rollbar
 
 import (
 	"fmt"
-	"github.com/davidji99/terraform-provider-rollbar/rollapi"
+	"github.com/davidji99/rollrest-go/rollrest"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	"log"
@@ -112,7 +112,7 @@ func resourceRollbarProjectAccessTokenImport(d *schema.ResourceData, meta interf
 
 func resourceRollbarProjectAccessTokenCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*Config).API
-	opts := &rollapi.PATCreateRequest{}
+	opts := &rollrest.PATCreateRequest{}
 
 	if v, ok := d.GetOk("name"); ok {
 		vs := v.(string)
@@ -146,13 +146,13 @@ func resourceRollbarProjectAccessTokenCreate(d *schema.ResourceData, meta interf
 		}
 
 		log.Printf("[DEBUG] project access token rate_limit_window_size : %d", vs)
-		opts.RateLimitWindowSize = &vs
+		opts.RateLimitWindowSize = vs
 	}
 
 	if v, ok := d.GetOk("rate_limit_window_count"); ok {
 		vs := v.(int)
 		log.Printf("[DEBUG] project access token RateLimitWindowCount : %d", vs)
-		opts.RateLimitWindowCount = &vs
+		opts.RateLimitWindowCount = vs
 	}
 
 	log.Printf("Creating project access token %s", opts.Name)
@@ -212,18 +212,18 @@ func resourceRollbarProjectAccessTokenRead(d *schema.ResourceData, meta interfac
 
 func resourceRollbarProjectAccessTokenUpdate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*Config).API
-	opts := &rollapi.PATUpdateRequest{}
+	opts := &rollrest.PATUpdateRequest{}
 
 	if v, ok := d.GetOk("rate_limit_window_size"); ok {
 		vs := v.(int)
 		log.Printf("[DEBUG] project access token rate_limit_window_size : %d", vs)
-		opts.RateLimitWindowSize = &vs
+		opts.RateLimitWindowSize = vs
 	}
 
 	if v, ok := d.GetOk("rate_limit_window_count"); ok {
 		vs := v.(int)
 		log.Printf("[DEBUG] project access token rate_limit_window_count : %d", vs)
-		opts.RateLimitWindowCount = &vs
+		opts.RateLimitWindowCount = vs
 	}
 	pat, _, updateErr := client.ProjectAccessTokens.Update(getProjectID(d), getAccessToken(d), opts)
 	if updateErr != nil {

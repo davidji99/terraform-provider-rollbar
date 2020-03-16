@@ -3,7 +3,7 @@ package rollbar
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/davidji99/terraform-provider-rollbar/rollapi"
+	"github.com/davidji99/rollrest-go/rollrest"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	"log"
@@ -169,15 +169,15 @@ func resourceRollbarPagerDutyNotificationRuleDelete(d *schema.ResourceData, meta
 }
 
 // constructRuleDefinitions returns a properly formatted and nested notification rule request.
-func constructRuleDefinitions(d *schema.ResourceData) []*rollapi.PDRuleRequest {
-	opts := make([]*rollapi.PDRuleRequest, 0)
+func constructRuleDefinitions(d *schema.ResourceData) []*rollrest.PDRuleRequest {
+	opts := make([]*rollrest.PDRuleRequest, 0)
 
 	if ruleListRaw, ok := d.GetOk("rule"); ok {
 		ruleList := ruleListRaw.([]interface{})
 
 		// Iterate through the ruleList
 		for _, ruleRaw := range ruleList {
-			pdRule := &rollapi.PDRuleRequest{}
+			pdRule := &rollrest.PDRuleRequest{}
 
 			rule := ruleRaw.(map[string]interface{})
 
@@ -189,7 +189,7 @@ func constructRuleDefinitions(d *schema.ResourceData) []*rollapi.PDRuleRequest {
 			// Define config
 			if configRaw, ok := rule["config"]; ok {
 				config := configRaw.(map[string]interface{})
-				configOpt := &rollapi.PDRuleConfig{}
+				configOpt := &rollrest.PDRuleConfig{}
 
 				if serviceKeyRaw, ok := config["service_key"]; ok {
 					configOpt.ServiceKey = serviceKeyRaw.(string)
@@ -200,12 +200,12 @@ func constructRuleDefinitions(d *schema.ResourceData) []*rollapi.PDRuleRequest {
 
 			// Define filters
 			if ruleFilterListRaw, ok := rule["filter"]; ok {
-				ruleFilterOpts := make([]*rollapi.PDRuleFilter, 0)
+				ruleFilterOpts := make([]*rollrest.PDRuleFilter, 0)
 				filterList := ruleFilterListRaw.([]interface{})
 
 				// Iterate through the filters
 				for _, ruleFilterRaw := range filterList {
-					ruleFilterOpt := &rollapi.PDRuleFilter{}
+					ruleFilterOpt := &rollrest.PDRuleFilter{}
 					ruleFilter := ruleFilterRaw.(map[string]interface{})
 
 					if typeRaw, ok := ruleFilter["type"]; ok {
