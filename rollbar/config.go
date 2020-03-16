@@ -2,12 +2,14 @@ package rollbar
 
 import (
 	"encoding/json"
-	"github.com/davidji99/terraform-provider-rollbar/rollapi"
+	"fmt"
+	"github.com/davidji99/rollrest-go/rollrest"
+	"github.com/davidji99/terraform-provider-rollbar/version"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 )
 
 type Config struct {
-	API                                       *rollapi.Client
+	API                                       *rollrest.Client
 	Headers                                   map[string]string
 	accountAccessToken                        string
 	projectAccessToken                        string
@@ -20,13 +22,10 @@ func NewConfig() *Config {
 }
 
 func (c *Config) initializeAPI() error {
-	authConfig := &rollapi.TokenAuthConfig{
-		AccountAccessToken: &c.accountAccessToken,
-		ProjectAccessToken: &c.projectAccessToken,
-		CustomHTTPHeaders:  c.Headers,
-	}
+	userAgent := fmt.Sprintf("terraform-provider-refocus/v%s", version.ProviderVersion)
 
-	api, clientInitErr := rollapi.NewClientTokenAuth(authConfig)
+	api, clientInitErr := rollrest.New(rollrest.AuthAAT(c.accountAccessToken), rollrest.AuthPAT(c.projectAccessToken),
+		rollrest.CustomHTTPHeaders(c.Headers), rollrest.UserAgent(userAgent))
 	if clientInitErr != nil {
 		return clientInitErr
 	}

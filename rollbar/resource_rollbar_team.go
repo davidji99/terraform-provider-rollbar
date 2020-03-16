@@ -1,7 +1,7 @@
 package rollbar
 
 import (
-	"github.com/davidji99/terraform-provider-rollbar/rollapi"
+	"github.com/davidji99/rollrest-go/rollrest"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	"log"
@@ -52,7 +52,7 @@ func resourceRollbarTeamImport(d *schema.ResourceData, meta interface{}) ([]*sch
 
 func resourceRollbarTeamCreate(d *schema.ResourceData, meta interface{}) error {
 	client := meta.(*Config).API
-	opts := &rollapi.TeamRequest{}
+	opts := &rollrest.TeamRequest{}
 
 	if v, ok := d.GetOk("name"); ok {
 		vs := v.(string)
