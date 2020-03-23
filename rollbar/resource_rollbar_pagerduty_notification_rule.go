@@ -179,7 +179,7 @@ func constructRuleDefinitions(d *schema.ResourceData) []*rollrest.PDRuleRequest 
 
 			// Define config
 			if configRaw, ok := rule["config"]; ok {
-				config := configRaw.(*schema.Set).List()[0] // only one config block is allowed.
+				config := configRaw.([]interface{})[0] // only one config block is allowed.
 				configOpt := &rollrest.PDRuleConfig{}
 
 				if serviceKeyRaw, ok := config.(map[string]interface{})["service_key"]; ok {
