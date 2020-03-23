@@ -28,6 +28,8 @@ type PDRuleFilter struct {
 	Operation string `json:"operation,omitempty"`
 	Value     string `json:"value,omitempty"`
 	Path      string `json:"path,omitempty"`
+	Period    int    `json:"period,omitempty"`
+	Count     int    `json:"count,omitempty"`
 }
 
 // PDRuleConfig represents the configuration options available on a rule.

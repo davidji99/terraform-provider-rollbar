@@ -59,12 +59,14 @@ The following arguments are supported:
 
 * `rule` - (Required) A PagerDuty notification rule
 
-    * `trigger` - (Required) `<string>` The only valid option is `new_item` for now.
+    * `trigger` - (Required) `<string>` Valid options are: `new_item`, `occurrence_rate`, `resolved_item`,
+    `reactivated_item`, `exp_repeat_item`.
 
     * `filter` - (Required)
 
         * `type` - (Required) `<string>` The type of rule filter. 
-        Valid options are: `environment`, `level`, `title`, `filename`,`context`, `method`, `framework`, `path`.
+        Valid options are: `environment`, `level`, `title`, `filename`,`context`, `method`, `framework`, `path`,
+        `rate`,`unique_occurrences`.
 
         * `operation` - (Required) `<string>`
 
@@ -74,45 +76,63 @@ The following arguments are supported:
 
         * `path` - (Optional) `<string>` This attribute is used only for filter type `path`.
 
+        * `period` - (Optional) `<integer>` Number of seconds. Valid options are `60`, `300`, `1800`, `3600`, `86400`.
+
+        * `count` - (Optional) `<integer>` Rate of occurrences of an item.
+
     * `config` - (Optional) Any additional rule configurations
 
         * `service_key` - (Required) `string` Use this service API key instead of the default PagerDuty Service API key.
 
-### Filter Explanations
+#### Rule Explanation
+Certain rule triggers will require certain filters. Here are some of the following requirements:
+1. Define a `filter.type` of `rate` when constructing an `occurrence_rate` rule trigger.
+
+Please refer to the official [Rollbar OpenAPI specification](https://explorer.docs.rollbar.com/main.yaml) for more information.
+
+#### Filter Options
 
 As of Feb 11th, 2020, the Rollbar Rest API documentation does not present the available options to the `rule.filter` 
 attribute block in an easily readable manner. Therefore, this section will provide a summary of the available 
 options for `rule.filter`:
 
-1. For `filter.type` type `environment`:
+1. For `filter.type` of `environment`:
     * Valid `filter.operation` option(s): `eq`, `neq`
     * Valid `filter.value` option(s): any freeform `string`*
 
-1. For `filter.type` type `level`:
+1. For `filter.type` of `level`:
        * Valid `filter.operation` option(s): `eq`, `gte`
        * Valid `filter.value` option(s): `debug`, `info`, `warning`, `error`, `critical` (case sensitive!)
 
-1. For `filter.type` type `title`:
+1. For `filter.type` of `title`:
       * Valid `filter.operation` option(s): `within`, `nwithin`, `regex`, `nregex`
       * Valid `filter.value` option(s): any freeform `string`*
       
-1. For `filter.type` type `filename`:
+1. For `filter.type` of `filename`:
     * Valid `filter.operation` option(s): `within`, `nwithin`, `regex`, `nregex`
     * Valid `filter.value` option(s): any freeform `string`*
 
-1. For `filter.type` type `context`:
+1. For `filter.type` of `context`:
     * Valid `filter.operation` option(s): `startswith`, `eq`, `neq`
     * Valid `filter.value` option(s): any freeform `string`*
 
-1. For `filter.type` type `method`:
+1. For `filter.type` of `method`:
     * Valid `filter.operation` option(s): `within`, `nwithin`, `regex`, `nregex`
     * Valid `filter.value` option(s): any freeform `string`*
 
-1. For `filter.type` type `framework`:
+1. For `filter.type` of `framework`:
     * Valid `filter.operation` option(s): `eq`
     * Valid `filter.value` option(s): any freeform `string`*
 
-For the `filter.type` type `path`, there are two possible setups:
+1. For `filter.type` of `rate`:
+    * Valid `filter.period` option(s): Whole number greater than zero
+    * Valid `filter.count` option(s): Whole number greater than zero
+
+1. For `filter.type` of `unique_occurrences`:
+    * Valid `filter.operation` option(s): Only valid option is `gte`
+    * Valid `filter.value` option(s): Whole number greater than zero
+
+For the `filter.type` of `path`, there are two possible setups:
 
 * If you define `filter.value` & `filter.operation` in your terraform configuration,
     * Valid `filter.operation` option(s): `eq`, `gte`, `lte`, `within`, `nwithin`, `neq`, `regex`, `nregex`, `startswith`
