@@ -76,7 +76,7 @@ The following arguments are supported:
 
         * `path` - (Optional) `<string>` This attribute is used only for filter type `path`.
 
-        * `period` - (Optional) `<integer>` Number of seconds.
+        * `period` - (Optional) `<integer>` Number of seconds. Valid options are `60`, `300`, `1800`, `3600`, `86400`.
 
         * `count` - (Optional) `<integer>` Rate of occurrences of an item.
 

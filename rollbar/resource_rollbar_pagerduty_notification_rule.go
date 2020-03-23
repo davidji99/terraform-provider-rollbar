@@ -1,7 +1,6 @@
 package rollbar
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/davidji99/rollrest-go/rollrest"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
@@ -18,6 +17,8 @@ var (
 	validFilters = []string{"environment", "level", "title", "filename",
 		"context", "method", "framework", "path", "rate",
 		"unique_occurrences"}
+
+	validFilterPeriods = []int{60, 300, 1800, 3600, 86400}
 )
 
 func resourceRollbarPagerDutyNotificationRule() *schema.Resource {
@@ -58,7 +59,7 @@ func resourceRollbarPagerDutyNotificationRule() *schema.Resource {
 
 									"operation": {
 										Type:     schema.TypeString,
-										Required: true,
+										Optional: true,
 									},
 
 									"value": {
@@ -67,8 +68,9 @@ func resourceRollbarPagerDutyNotificationRule() *schema.Resource {
 									},
 
 									"period": {
-										Type:     schema.TypeInt,
-										Optional: true,
+										Type:         schema.TypeInt,
+										Optional:     true,
+										ValidateFunc: validation.IntInSlice(validFilterPeriods),
 									},
 
 									"count": {
@@ -80,13 +82,16 @@ func resourceRollbarPagerDutyNotificationRule() *schema.Resource {
 						},
 
 						"config": {
-							Type:     schema.TypeMap,
-							Optional: true,
+							Type:       schema.TypeList,
+							ConfigMode: schema.SchemaConfigModeBlock,
+							MaxItems:   1,
+							Optional:   true,
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"service_key": {
 										Type:         schema.TypeString,
-										Required:     true, // as it is the only one defined.
+										Sensitive:    true,
+										Optional:     true,
 										ValidateFunc: validation.StringLenBetween(32, 32),
 									},
 								},
@@ -117,32 +122,8 @@ func resourceRollbarPagerDutyNotificationRuleCreate(d *schema.ResourceData, meta
 }
 
 func resourceRollbarPagerDutyNotificationRuleRead(d *schema.ResourceData, meta interface{}) error {
-	// The API doesn't support any GET endpoints for this resource so just setting what is defined into state
-	out, marshallErr := json.Marshal(constructRuleDefinitions(d))
-	if marshallErr != nil {
-		return marshallErr
-	}
-
-	ruleListMap := make([]map[string]interface{}, 0)
-	err := json.Unmarshal(out, &ruleListMap)
-	if err != nil {
-		return err
-	}
-
-	// Rename all map keys named 'filters' in ruleListMap to 'filter' to be consistent with resource schema before
-	// saving to state. The reason being the JSON schema for this resource's request requires 'filters'.
-	for _, ruleMap := range ruleListMap {
-		for k, v := range ruleMap {
-			if k == "filters" {
-				ruleMap["filter"] = v
-				delete(ruleMap, k)
-			}
-		}
-	}
-
-	log.Printf("[DEBUG] Rules to be stored in state %v", ruleListMap)
-
-	return d.Set("rule", ruleListMap)
+	// Set state to what is defined in schema as there is no READ endpoint.
+	return d.Set("rule", d.Get("rule"))
 }
 
 func resourceRollbarPagerDutyNotificationRuleUpdate(d *schema.ResourceData, meta interface{}) error {
@@ -198,10 +179,10 @@ func constructRuleDefinitions(d *schema.ResourceData) []*rollrest.PDRuleRequest 
 
 			// Define config
 			if configRaw, ok := rule["config"]; ok {
-				config := configRaw.(map[string]interface{})
+				config := configRaw.(*schema.Set).List()[0] // only one config block is allowed.
 				configOpt := &rollrest.PDRuleConfig{}
 
-				if serviceKeyRaw, ok := config["service_key"]; ok {
+				if serviceKeyRaw, ok := config.(map[string]interface{})["service_key"]; ok {
 					configOpt.ServiceKey = serviceKeyRaw.(string)
 				}
 
