@@ -18,7 +18,7 @@ For more information on the supported values when constructing a rule, please vi
 Whatever rule(s) you define in your terraform configuration **will be the only rules** present in your account 
 after a `terraform apply`. This is especially important to understand if you have pre-existing rules in your account 
 prior to terraform managing this resource or rules created outside of terraform. In other words, this provider/terraform 
-will overwrite any remotely defined rules not in your configuration files.
+will overwrite any remotely defined rules not in your configuration files. Furthermore, it is strongly advised that you only declare one `rollbar_pagerduty_notification_rule` in your configuration files for the reasons above.
 
 ## Example Usage
 
