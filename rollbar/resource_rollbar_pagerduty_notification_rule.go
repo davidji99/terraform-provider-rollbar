@@ -7,9 +7,17 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	"log"
-	"regexp"
 	"strconv"
 	"time"
+)
+
+var (
+	validTriggers = []string{"new_item", "occurrence_rate", "resolved_item",
+		"reactivated_item", "exp_repeat_item"}
+
+	validFilters = []string{"environment", "level", "title", "filename",
+		"context", "method", "framework", "path", "rate",
+		"unique_occurrences"}
 )
 
 func resourceRollbarPagerDutyNotificationRule() *schema.Resource {
@@ -31,10 +39,9 @@ func resourceRollbarPagerDutyNotificationRule() *schema.Resource {
 				Elem: &schema.Resource{
 					Schema: map[string]*schema.Schema{
 						"trigger": {
-							Type:     schema.TypeString,
-							Required: true,
-							ValidateFunc: validation.StringMatch(
-								regexp.MustCompile(`^new_item$`), "only valid value is 'new_item'"),
+							Type:         schema.TypeString,
+							Required:     true,
+							ValidateFunc: validation.StringInSlice(validTriggers, false),
 						},
 
 						"filter": {
@@ -44,11 +51,9 @@ func resourceRollbarPagerDutyNotificationRule() *schema.Resource {
 							Elem: &schema.Resource{
 								Schema: map[string]*schema.Schema{
 									"type": {
-										Type:     schema.TypeString,
-										Required: true,
-										ValidateFunc: validation.StringInSlice(
-											[]string{"environment", "level", "title", "filename",
-												"context", "method", "framework", "path"}, false),
+										Type:         schema.TypeString,
+										Required:     true,
+										ValidateFunc: validation.StringInSlice(validFilters, false),
 									},
 
 									"operation": {
@@ -61,8 +66,13 @@ func resourceRollbarPagerDutyNotificationRule() *schema.Resource {
 										Optional: true,
 									},
 
-									"path": {
-										Type:     schema.TypeString,
+									"period": {
+										Type:     schema.TypeInt,
+										Optional: true,
+									},
+
+									"count": {
+										Type:     schema.TypeInt,
 										Optional: true,
 									},
 								},
@@ -120,7 +130,7 @@ func resourceRollbarPagerDutyNotificationRuleRead(d *schema.ResourceData, meta i
 	}
 
 	// Rename all map keys named 'filters' in ruleListMap to 'filter' to be consistent with resource schema before
-	// saving to state.
+	// saving to state. The reason being the JSON schema for this resource's request requires 'filters'.
 	for _, ruleMap := range ruleListMap {
 		for k, v := range ruleMap {
 			if k == "filters" {
@@ -222,6 +232,14 @@ func constructRuleDefinitions(d *schema.ResourceData) []*rollrest.PDRuleRequest 
 
 					if pathRaw, ok := ruleFilter["path"]; ok {
 						ruleFilterOpt.Path = pathRaw.(string)
+					}
+
+					if periodRaw, ok := ruleFilter["period"]; ok {
+						ruleFilterOpt.Period = periodRaw.(int)
+					}
+
+					if countRaw, ok := ruleFilter["count"]; ok {
+						ruleFilterOpt.Count = countRaw.(int)
 					}
 
 					// Add the new ruleFilterOpt to ruleFilterOpts

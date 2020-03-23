@@ -12,7 +12,7 @@ const (
 	DefaultAPIBaseURL = "https://api.rollbar.com/api/1"
 
 	// DefaultUserAgent is the user agent used when making API calls.
-	DefaultUserAgent = "rollbar-go"
+	DefaultUserAgent = "rollrest-go"
 
 	// RollbarAuthHeader is the Authorization header.
 	RollbarAuthHeader = "x-rollbar-access-token"
