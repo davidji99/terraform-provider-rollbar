@@ -22,10 +22,10 @@ func Provider() terraform.ResourceProvider {
 				DefaultFunc: schema.EnvDefaultFunc("ROLLBAR_ACCOUNT_ACCESS_TOKEN", nil),
 			},
 
-			"api_headers": {
-				Type:        schema.TypeString,
-				Optional:    true,
-				DefaultFunc: schema.EnvDefaultFunc("ROLLBAR_API_HEADERS", nil),
+			"headers": {
+				Type:     schema.TypeMap,
+				Elem:     schema.TypeString,
+				Optional: true,
 			},
 
 			"post_create_pd_integration_delete_default_rules": {

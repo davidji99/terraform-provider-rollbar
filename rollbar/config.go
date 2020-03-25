@@ -1,7 +1,6 @@
 package rollbar
 
 import (
-	"encoding/json"
 	"fmt"
 	"github.com/davidji99/rollrest-go/rollrest"
 	"github.com/davidji99/terraform-provider-rollbar/version"
@@ -35,12 +34,15 @@ func (c *Config) initializeAPI() error {
 }
 
 func (c *Config) applySchema(d *schema.ResourceData) (err error) {
-	headers := make(map[string]string)
-	if h := d.Get("api_headers").(string); h != "" {
-		if err = json.Unmarshal([]byte(h), &headers); err != nil {
-			return
+	if v, ok := d.GetOk("headers"); ok {
+		headersRaw := v.(map[string]interface{})
+		h := make(map[string]string)
+
+		for k, v := range headersRaw {
+			h[k] = fmt.Sprintf("%v", v)
 		}
-		c.Headers = headers
+
+		c.Headers = h
 	}
 
 	c.PostCreatePDIntegrationDeleteDefaultRules = d.Get("post_create_pd_integration_delete_default_rules").(bool)
