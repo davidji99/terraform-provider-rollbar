@@ -91,7 +91,7 @@ func resourceRollbarPagerDutyNotificationRule() *schema.Resource {
 									"service_key": {
 										Type:         schema.TypeString,
 										Sensitive:    true,
-										Optional:     true,
+										Required:     true,
 										ValidateFunc: validation.StringLenBetween(32, 32),
 									},
 								},
