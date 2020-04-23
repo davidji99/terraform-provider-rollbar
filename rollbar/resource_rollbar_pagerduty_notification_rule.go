@@ -178,7 +178,7 @@ func constructRuleDefinitions(d *schema.ResourceData) []*rollrest.PDRuleRequest 
 			}
 
 			// Define config
-			if configRaw, ok := rule["config"]; ok {
+			if configRaw, ok := rule["config"]; ok && len(configRaw.([]interface{})) == 1 {
 				config := configRaw.([]interface{})[0] // only one config block is allowed.
 				configOpt := &rollrest.PDRuleConfig{}
 
