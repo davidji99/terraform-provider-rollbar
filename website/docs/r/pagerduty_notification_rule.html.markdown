@@ -9,7 +9,7 @@ description: |-
 # rollbar\_pagerduty\_notification\_rule
 
 This resource is used to manage Rollbar's PagerDuty notification rules. You must supply a `project_access_token` with write
-permissions in other to manage this resource.
+permissions in other to manage this resource. Refer to https://docs.rollbar.com/docs/notifications for more information.
 
 For more information on the supported values when constructing a rule, please visit [this page](https://docs.rollbar.com/reference#setup-pagerduty-notification-rules).
 (Yes, you'll have to read an OpenAPI spec.)
