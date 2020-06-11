@@ -6,7 +6,6 @@ import (
 	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
 	"log"
-	"regexp"
 )
 
 func resourceRollbarProjectAccessToken() *schema.Resource {
@@ -31,9 +30,6 @@ func resourceRollbarProjectAccessToken() *schema.Resource {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
-				ValidateFunc: validation.StringMatch(regexp.MustCompile(`^[a-zA-Z][0-9A-Za-z,.\-_]{1,31}$`),
-					"Must start with a letter and can only contain letters, numbers, underscores, "+
-						"hyphens, and periods. Max length 32 characters."),
 			},
 
 			"scopes": {
