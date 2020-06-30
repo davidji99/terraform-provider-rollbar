@@ -4,62 +4,34 @@ os=$(uname)
 PROVIDER="rollbar"
 VERSION=$(go run ${PROVIDER}/version.go)
 
-# Install gox if it isn't installed on the machine.
-if [ "$(command -v gox)" = "" ]; then
-  echo "gox is not installed. Installing now..."
-  go get github.com/mitchellh/gox
-
-  echo "Running go mod tidy to cleanup go.mod file"
-  go mod tidy
+if [ "$(command -v goreleaser)" = "" ]; then
+  echo "goreleaser is not installed. Please visit https://goreleaser.com/install/ for more information."
+  exit 1
 fi
 
-# Create target folder
-mkdir -v -p target
+echo "Pulling down latest from origin"
+git pull origin master
 
-echo "Generating release binaries for provider ${PROVIDER}"
+echo "Switching to master branch"
+git checkout master
 
-# Create SHA256SUM file
-SHASUM_FILE="target/${PROVIDER}-${VERSION}_SHA256SUMS"
+echo "Checking if master branch is clean"
+if [ "$(git status --porcelain)" != "" ]; then
+  echo "branch is not clean. please add/commit or stage any changes first"
+  exit 1
+fi
 
-# Delete the old file if it exists
-rm -rf "${SHASUM_FILE}"
+echo "Checking if the tag already exists"
+if git show ${VERSION} >> /dev/null 2>&1 || false ; then
+  echo "tag ${VERSION} already exists. Did you forget to bump the version in version.go file?"
+  exit 1
+fi
 
-# Create a new empty file
-touch "${SHASUM_FILE}"
+echo "Checking if .goreleaser.yml is valid"
+goreleaser check
 
-platforms=("linux/386" "linux/amd64" "linux/arm" "darwin/amd64" "windows/386" "windows/amd64"
-"freebsd/386" "freebsd/amd64" "freebsd/arm" "openbsd/386" "openbsd/amd64" "solaris/amd64")
+echo "Creating new release tag ${VERSION}"
+git tag -a "${VERSION}" -m "Release ${VERSION}"
 
-for platform in "${platforms[@]}"
-do
-  platform_split=(${platform//\// })
-  GOOS=${platform_split[0]}
-  GOARCH=${platform_split[1]}
-
-  OUTPUT_FILE="target/${GOOS}_${GOARCH}/terraform-provider-${PROVIDER}_v${VERSION}"
-
-  gox -os="${GOOS}" \
-    -arch="${GOARCH}" -osarch='!darwin/arm !darwin/386' \
-    -output "${OUTPUT_FILE}" .
-
-  # Define the file output name
-  zipped_file="${PROVIDER}-${VERSION}-${GOOS}-${GOARCH}.zip"
-
-  if [ "${GOOS}" = "windows" ]; then
-      OUTPUT_FILE+='.exe'
-  fi
-
-  # Compress and zip up new binary
-  zip -9 -D -j target/"${zipped_file}" $OUTPUT_FILE
-  rm -rf PROVIDER
-
-  # Generate SHASUM
-  if [ "$os" == "Darwin" ]; then
-      (cd target && shasum -a 256 "${zipped_file}") >> "${SHASUM_FILE}"
-  elif [ "$os" == "Linux" ]; then
-      (cd target && sha256sum  "${zipped_file}") >> "${SHASUM_FILE}"
-  else
-      echo "Unsupported OS for generating SHASUM256"
-      exit 1
-  fi
-done
+echo "Pushing new release tag ${VERSION} to upstream origin"
+git push origin "${VERSION}"
