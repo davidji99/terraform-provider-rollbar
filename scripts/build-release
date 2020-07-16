@@ -2,7 +2,7 @@
 
 os=$(uname)
 PROVIDER="rollbar"
-VERSION=$(go run ${PROVIDER}/version.go)
+VERSION="v$(go run ${PROVIDER}/version.go)"
 
 if [ "$(command -v goreleaser)" = "" ]; then
   echo "goreleaser is not installed. Please visit https://goreleaser.com/install/ for more information."
