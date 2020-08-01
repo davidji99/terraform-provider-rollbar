@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/davidji99/rollrest-go/rollrest"
 	"github.com/davidji99/terraform-provider-rollbar/version"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 )
 
 type Config struct {

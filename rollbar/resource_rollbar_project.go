@@ -2,8 +2,8 @@ package rollbar
 
 import (
 	"github.com/davidji99/rollrest-go/rollrest"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/helper/validation"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/validation"
 	"log"
 	"regexp"
 )
