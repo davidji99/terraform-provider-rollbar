@@ -1,13 +1,14 @@
 package rollbar
 
 import (
-	"github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-	"github.com/hashicorp/terraform-plugin-sdk/terraform"
+	"context"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"log"
 )
 
-// Provider returns a terraform.ResourceProvider.
-func Provider() terraform.ResourceProvider {
+// Provider returns a schema.Provider.
+func Provider() *schema.Provider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
 			"project_access_token": {
@@ -50,12 +51,12 @@ func Provider() terraform.ResourceProvider {
 			"rollbar_team":                        resourceRollbarTeam(),
 		},
 
-		ConfigureFunc: providerConfigure,
+		ConfigureContextFunc: providerConfigure,
 	}
 }
 
 // providerConfigure configures the rollbar api client
-func providerConfigure(d *schema.ResourceData) (interface{}, error) {
+func providerConfigure(_ context.Context, d *schema.ResourceData) (interface{}, diag.Diagnostics) {
 	log.Println("[INFO] Initializing Rollbar Provider")
 
 	config := NewConfig()
@@ -71,11 +72,11 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	}
 
 	if applySchemaErr := config.applySchema(d); applySchemaErr != nil {
-		return nil, applySchemaErr
+		return nil, diag.FromErr(applySchemaErr)
 	}
 
 	if err := config.initializeAPI(); err != nil {
-		return nil, err
+		return nil, diag.FromErr(err)
 	}
 
 	log.Printf("[DEBUG] Rollbar provider initialized")

@@ -6,29 +6,42 @@ Terraform Provider Rollbar
 This provider is used to configure certain resources supported by [Rollbar API](https://docs.rollbar.com/reference).
 
 **NOTE**: This provider is unofficial and not created by the Rollbar team.
-If you have questions about Rollbar functionality, please kindly refer to the [official Rollbar API documentation](https://docs.rollbar.com/).
+If you have questions about Rollbar functionality, please kindly refer to the [Rollbar API documentation](https://explorer.docs.rollbar.com/).
 
 For provider bugs/questions, please open an issue on this repository.
 
 Documentation
 ------------
 
-Documentation about resources and data sources can be found [here](https://github.com/davidji99/terraform-provider-rollbar/tree/master/website).
+Documentation about resources and data sources can be found [here](https://registry.terraform.io/providers/davidji99/rollbar/latest/docs).
 
 Requirements
 ------------
 
-- [Terraform](https://www.terraform.io/downloads.html) 0.12.x
-- [Go](https://golang.org/doc/install) 1.12 (to build the provider plugin)
+- [Terraform](https://www.terraform.io/downloads.html) `v0.12+`. (No support for terraform `v0.11`)
+- [Go](https://golang.org/doc/install) `v1.14` (to build the provider plugin)
 
 Usage
 -----
 
-For Terraform 0.12+ compatibility, the configuration should specify version 0.1.0 or higher:
-
-```hcl
+For Terraform `v0.12+` compatibility, the configuration should specify version 1.0.0 or higher:
+```hcl-terraform
 provider "rollbar" {
-  version = ">= 0.1.0"
+  version = ">= 1.0.0"
+}
+```
+- This requires the provider binary installed somewhere on the host machine.
+
+
+For Terraform `v0.13+` compatibility, the following configuration should be used:
+```hcl-terraform
+terraform {
+  required_providers {
+    rollbar = {
+      source = "davidji99/rollbar"
+      version = "1.0.0"
+    }
+  }
 }
 ```
 

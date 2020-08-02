@@ -2,6 +2,8 @@ package rollbar
 
 import (
 	"fmt"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -50,4 +52,17 @@ func Contains(s []string, e string) bool {
 // DoesNotContain does the exact opposite of Contains.
 func DoesNotContain(s []string, e string) bool {
 	return !Contains(s, e)
+}
+
+func SetAttribute(d *schema.ResourceData, diags diag.Diagnostics, attrName string, attrValue interface{}) {
+	setErr := d.Set(attrName, attrValue)
+
+	if setErr != nil {
+		diags = append(diags, diag.Diagnostic{
+			Severity:      diag.Error,
+			Summary:       fmt.Sprintf("unable to set attribute name %s withvalue %s in state", attrName, attrValue),
+			Detail:        setErr.Error(),
+			AttributePath: nil,
+		})
+	}
 }

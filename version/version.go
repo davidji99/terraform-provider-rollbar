@@ -9,5 +9,5 @@ package version
 var (
 	// ProviderVersion is set during the release process to the release version of the binary, and
 	// set to acc during tests.
-	ProviderVersion = "0.4.6"
+	ProviderVersion = "1.0.0-beta1"
 )

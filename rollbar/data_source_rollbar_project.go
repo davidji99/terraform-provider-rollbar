@@ -1,11 +1,14 @@
 package rollbar
 
-import "github.com/hashicorp/terraform-plugin-sdk/helper/schema"
-import fmt "fmt"
+import (
+	"context"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+)
 
 func dataSourceRollbarProject() *schema.Resource {
 	return &schema.Resource{
-		Read: dataSourceRollbarProjectRead,
+		ReadContext: dataSourceRollbarProjectRead,
 		Schema: map[string]*schema.Schema{
 			"name": {
 				Type:     schema.TypeString,
@@ -30,14 +33,14 @@ func dataSourceRollbarProject() *schema.Resource {
 	}
 }
 
-func dataSourceRollbarProjectRead(d *schema.ResourceData, m interface{}) error {
+func dataSourceRollbarProjectRead(_ context.Context, d *schema.ResourceData, m interface{}) diag.Diagnostics {
 	client := m.(*Config).API
 	name := d.Get("name").(string)
 
 	result, _, err := client.Projects.List()
 
 	if err != nil {
-		return err
+		diag.FromErr(err)
 	}
 
 	if result.HasResult() {
@@ -45,14 +48,15 @@ func dataSourceRollbarProjectRead(d *schema.ResourceData, m interface{}) error {
 			if project.GetName() == name {
 				d.SetId(Int64ToString(project.GetID()))
 
-				var setErr error
-				setErr = d.Set("status", project.GetStatus())
-				setErr = d.Set("account_id", project.GetAccountID())
-				setErr = d.Set("name", project.GetName())
-				return setErr
+				var diags diag.Diagnostics
+				SetAttribute(d, diags, "status", project.GetStatus())
+				SetAttribute(d, diags, "account_id", project.GetAccountID())
+				SetAttribute(d, diags, "name", project.GetName())
+
+				return diags
 			}
 		}
 	}
 
-	return fmt.Errorf("no matches found for project name: %s", name)
+	return diag.Errorf("no matches found for project name: %s", name)
 }
