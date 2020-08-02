@@ -5,9 +5,10 @@
 A simple wrapper around [go-resty](https://github.com/go-resty/resty).
 
 ## Background
-Having used go-resty to create clients for various service APIs, I noticed a common set of methods I would define in each
-API client. I extracted those methods/function and moved them into this separate library. This way, all my clients could benefit
-from using a single library to interface with the APIs.
+Having used [go-resty](https://github.com/go-resty/resty) to create clients for various service APIs,
+I noticed a common set of methods/functions I would define in each API client. I extracted those methods/functions
+and moved them into this separate library. This way, all my clients could benefit from using a single library to
+interface with the APIs.
 
 I have embedded `resty.Client` into `simpleresty.Client` so all of `resty`'s functions/methods are available to the user.
 In fact, `simpleresty.New()` returns a `resty.Client`.
@@ -15,21 +16,42 @@ In fact, `simpleresty.New()` returns a `resty.Client`.
 ## Example
 
 ```go
+package main
+
+import (
+	"fmt"
+	"github.com/davidji99/simpleresty"
+)
+
 type GithubAPIResponse struct {
-    CurrentUserURL string `json:"current_user_url,omitempty"`
+	CurrentUserURL string `json:"current_user_url,omitempty"`
 }
 
-c := simpleresty.New()
-c.SetBaseURL("https://api.github.com/")
+func main() {
+	c := simpleresty.New()
 
-var result *GithubAPIResponse
-response, getErr := c.Get("", result, nil)
+	var result *GithubAPIResponse
+	response, getErr := c.Get("https://api.github.com", &result, nil)
+	if getErr != nil {
+		panic(getErr)
+	}
 
-fmt.Println(getErr)
-
-fmt.Println(response.StatusCode)
-fmt.Println(result.CurrentUserURL)
+	fmt.Println(response.StatusCode) // Returns 200
+	fmt.Println(result.CurrentUserURL) // Returns 'https://api.github.com/user'
+}
 ```
+
+You can also check out [rollrest-go](https://github.com/davidji99/rollrest-go), which uses this library to implement
+an API rest client for Rollbar.
+
+## Proxy
+`simpleresty` respects any proxy URLs set in your environment in this order of preference:
+1. `HTTPS_PROXY`
+1. `https_proxy`
+1. `HTTP_PROXY`
+1. `http_proxy`
+
+Only a single value from one of the above four environment variables will be used to set the proxy URL on the `Client`.
 
 ## Go-Resty
 As this pkg is a thin wrapper around go-resty, all of its methods are available to use in this package.
