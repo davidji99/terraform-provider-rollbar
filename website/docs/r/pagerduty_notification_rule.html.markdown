@@ -11,14 +11,13 @@ description: |-
 This resource is used to manage Rollbar's PagerDuty notification rules. You must supply a `project_access_token` with write
 permissions in other to manage this resource. Refer to https://docs.rollbar.com/docs/notifications for more information.
 
-For more information on the supported values when constructing a rule, please visit [this page](https://docs.rollbar.com/reference#setup-pagerduty-notification-rules).
-(Yes, you'll have to read an OpenAPI spec.)
+For more information on the supported values when constructing a rule, please visit [this page](https://explorer.docs.rollbar.com/#tag/Notifications/paths/~1api~11~1notifications~1pagerduty~1rules/put).
 
 ~> NOTE: Due to API limitations, it is not possible to selectively `GET`, `DELETE` or `CREATE` a single notification rule.
 Whatever rule(s) you define in your terraform configuration **will be the only rules** present in your account 
 after a `terraform apply`. This is especially important to understand if you have pre-existing rules in your account 
 prior to terraform managing this resource or rules created outside of terraform. In other words, this provider/terraform 
-will overwrite any remotely defined rules not in your configuration files. Furthermore, it is strongly advised that you only declare one `rollbar_pagerduty_notification_rule` in your configuration files for the reasons above.
+will overwrite any remotely defined rules not in your configuration files. Furthermore, it is strongly advised that you only declare a single `rollbar_pagerduty_notification_rule` across all your terraform configuration files for the reasons above.
 
 ## Example Usage
 
