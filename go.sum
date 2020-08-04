@@ -64,10 +64,10 @@ github.com/davecgh/go-spew v1.1.1 h1:vj9j/u1bqnvCEfJOwUhtlOARqs3+rkHYY13jYWTU97c
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/davidji99/go-querystring v1.0.2 h1:zZUgCkhdFEsb0b1tS1zhn7FwjoRyp33J3be1av5sBi0=
 github.com/davidji99/go-querystring v1.0.2/go.mod h1:67KzURpYgsT0d/eszawoSvtpI+34vczasEK3xgrxrqA=
-github.com/davidji99/rollrest-go v0.1.3 h1:I6TO4XK2za+mQdVDDSDpAm/w7DSs/3W2QEczujD0RI4=
-github.com/davidji99/rollrest-go v0.1.3/go.mod h1:KBR6v4xnDpUeBG85z0Uv0RZX3SIgWPDD12zANOOWgIg=
-github.com/davidji99/simpleresty v0.2.2 h1:5Q4ECmGmALR8s/nyT/Xh2LybpIgjPIMxCFsN6JF9iqk=
-github.com/davidji99/simpleresty v0.2.2/go.mod h1:v1honpRzBWA0G2Ivpz3ozeaB4zRiYxvu8CAAAtAlHqY=
+github.com/davidji99/rollrest-go v0.1.4 h1:+wHOufzJ8b2sSBcjMmz6a8cHUNnQO+Jo5SJRVKoRzTY=
+github.com/davidji99/rollrest-go v0.1.4/go.mod h1:avSXFeDrY9utfUC8HO8ooVFAf0Mugm2N9qhzdkBa01g=
+github.com/davidji99/simpleresty v0.2.3 h1:oUHimRSFUgGgJjd+65q3L9alzPF3vFBiXHKxVVmkvkU=
+github.com/davidji99/simpleresty v0.2.3/go.mod h1:v1honpRzBWA0G2Ivpz3ozeaB4zRiYxvu8CAAAtAlHqY=
 github.com/envoyproxy/go-control-plane v0.9.0/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.1-0.20191026205805-5f8ba28d4473/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.4/go.mod h1:6rpuAdCZL397s3pYoYcLgu1mIlRU8Am5FuJP05cCM98=

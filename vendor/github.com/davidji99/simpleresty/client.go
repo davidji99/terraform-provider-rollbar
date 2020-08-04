@@ -3,6 +3,7 @@ package simpleresty
 import (
 	"fmt"
 	"github.com/go-resty/resty/v2"
+	"strings"
 )
 
 const (
@@ -19,12 +20,25 @@ type Client struct {
 
 	// baseURL for the API endpoint. Please include a trailing slash '/'.
 	baseURL string
+
+	// noProxyDomains contains a list of domains that don't require a proxy.
+	noProxyDomains []string
+
+	// proxyURL represents a proxy URL.
+	proxyURL *string
+
+	// shouldSetProxy stores a boolean value that determines if a proxy needs to be used.
+	shouldSetProxy bool
 }
 
 // Dispatch method is a wrapper around the send method which
 // performs the HTTP request using the method and URL already defined.
 func (c *Client) Dispatch(request *resty.Request) (*Response, error) {
+	// Set Proxy if applicable
+	c.determineSetProxy()
+
 	response, err := request.Send()
+
 	if err != nil {
 		return nil, err
 	}
@@ -94,6 +108,9 @@ func (c *Client) Delete(url string, r, body interface{}) (*Response, error) {
 
 // ConstructRequest creates a new request.
 func (c *Client) ConstructRequest(r, body interface{}) *resty.Request {
+	// Set Proxy if applicable
+	c.determineSetProxy()
+
 	req := c.R().SetBody(body)
 
 	if r != nil {
@@ -105,6 +122,11 @@ func (c *Client) ConstructRequest(r, body interface{}) *resty.Request {
 
 // RequestURL appends the template argument to the base URL and returns the full request URL.
 func (c *Client) RequestURL(template string, args ...interface{}) string {
+	// Validate to make sure baseURL is set
+	if c.baseURL == "" {
+		panic("base URL not set")
+	}
+
 	if len(args) == 1 && args[0] == "" {
 		return c.baseURL + template
 	}
@@ -122,4 +144,31 @@ func (c *Client) RequestURLWithQueryParams(url string, opts ...interface{}) (str
 // SetBaseURL sets the base url for the client.
 func (c *Client) SetBaseURL(url string) {
 	c.baseURL = url
+}
+
+// determineSetProxy first checks if proxy is already set or not. If it is, this method returns early.
+//
+// If no proxy is set, it will be set if the proxyURL is defined and the base domain is not present
+// in the noProxyDomains string array.
+func (c *Client) determineSetProxy() {
+	// If proxy is already set in a previous execution, short circuit this method call.
+	if c.IsProxySet() {
+		return
+	}
+
+	if c.proxyURL != nil {
+		c.shouldSetProxy = true
+
+		// Loop through noProxyDomains and check if the base url doesn't need a proxy set for the Client.
+		for _, d := range c.noProxyDomains {
+			if strings.Contains(strings.ToLower(c.baseURL), d) {
+				c.shouldSetProxy = false
+				break
+			}
+		}
+
+		if c.shouldSetProxy {
+			c.SetProxy(*c.proxyURL)
+		}
+	}
 }

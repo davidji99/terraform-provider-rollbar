@@ -14,7 +14,6 @@ I have embedded `resty.Client` into `simpleresty.Client` so all of `resty`'s fun
 In fact, `simpleresty.New()` returns a `resty.Client`.
 
 ## Example
-
 ```go
 package main
 
@@ -41,10 +40,13 @@ func main() {
 }
 ```
 
+Additional examples can be found in the `/examples` folder.
+
 You can also check out [rollrest-go](https://github.com/davidji99/rollrest-go), which uses this library to implement
 an API rest client for Rollbar.
 
 ## Proxy
+
 `simpleresty` respects any proxy URLs set in your environment in this order of preference:
 1. `HTTPS_PROXY`
 1. `https_proxy`
@@ -52,6 +54,9 @@ an API rest client for Rollbar.
 1. `http_proxy`
 
 Only a single value from one of the above four environment variables will be used to set the proxy URL on the `Client`.
+
+`simpleresty` will also respect domains (not IP addresses or CIDR ranges) defined by the `NO_PROXY` or `no_proxy`
+environment variable. Multiple domains must be separated by a comma.
 
 ## Go-Resty
 As this pkg is a thin wrapper around go-resty, all of its methods are available to use in this package.
