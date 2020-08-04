@@ -34,6 +34,7 @@ type Response struct {
 	Body string
 }
 
+// checkResponse parses the HTTP response and returns the response and an error if applicable.
 func checkResponse(resp *resty.Response) (*Response, error) {
 	path, _ := url.QueryUnescape(resp.Request.URL)
 	r := &Response{Status: resp.Status(), StatusCode: resp.StatusCode(),
