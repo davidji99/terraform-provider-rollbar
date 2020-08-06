@@ -14,14 +14,13 @@ Access tokens are used to read and write data via the Rollbar API.
 Each token has a set of scopes that determine which operations can be performed with the token.
 
 Tokens have configurable rate limits that define how many times they may be used for API calls in a given interval.
-The default rate limit and system max is 5000 calls every 1 minute.
-The default rate limit takes precedence over any custom rate limits.
+The default rate limit and system max is 5000 calls every 1 minute. The default rate limit takes precedence over any custom rate limits.
 If you need a higher rate limit, please contact support@rollbar.com.
 
-**NOTE:** As of (Feb. 9th, 2020), the Rollbar API does not provide support for the following and therefore cannot
-be implemented in the provider:
-1. Deleting access tokens. Users will need to delete the token via the UI after a `terraform destroy`. The resource
-will only be removed from your state after resource destruction.
+**NOTE:** As of (August 6th, 2020), the Rollbar API does not provide support for the following
+and therefore cannot be implemented in the provider:
+1. Deleting access tokens. Instead, the provider will 'disable' the token by setting its rate limit to 1 call per 30 days
+and remove the resource from your state. Then, the user can delete the token in the Rollbar UI.
 1. Updating a project access token's `name`, `status`, and `scopes`. Users will need to make updates via the UI
 and then update their terraform configuration prior to a `plan` or `apply`. Otherwise, terraform will detect a diff
 that cannot be resolved by any terraform `apply`.
