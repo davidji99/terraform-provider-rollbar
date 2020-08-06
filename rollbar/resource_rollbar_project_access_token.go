@@ -232,8 +232,23 @@ func resourceRollbarProjectAccessTokenUpdate(d *schema.ResourceData, meta interf
 }
 
 func resourceRollbarProjectAccessTokenDelete(d *schema.ResourceData, meta interface{}) error {
-	log.Printf("[DEBUG] There is no API DELETE support for project access token resource so this is a no-op. " +
-		"Resource will be removed only from state.")
+	client := meta.(*Config).API
+
+	// Set access token rate limits to 1 call per 2592000 seconds in order to 'invalidate' them
+	// as the Rollbar API does not support token deletions. A rate limit of 0 calls is not possible.
+	// Then remove the resource from state. The tokens will need to be removed manually in the UI afterwards.
+	opts := &rollrest.PATUpdateRequest{}
+
+	opts.RateLimitWindowCount = 1
+	opts.RateLimitWindowSize = 2592000
+
+	pat, _, updateErr := client.ProjectAccessTokens.Update(getProjectID(d), getAccessToken(d), opts)
+	if updateErr != nil {
+		return updateErr
+	}
+
+	log.Printf("[DEBUG] Updated project access token %s", pat.GetResult().GetName())
+
 	d.SetId("")
 
 	return nil
