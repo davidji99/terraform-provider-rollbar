@@ -11,13 +11,13 @@ const (
 	TestConfigAccountAccessToken TestConfigKey = iota
 	TestConfigAcceptanceTestKey
 	TestConfigPagerDutyAPIKey
-	TestConfigUserKey
+	TestConfigUserEmailKey
 )
 
 var testConfigKeyToEnvName = map[TestConfigKey]string{
 	TestConfigAccountAccessToken: "ROLLBAR_ACCOUNT_ACCESS_TOKEN",
 	TestConfigPagerDutyAPIKey:    "ROLLBAR_PD_API_KEY",
-	TestConfigUserKey:            "ROLLBAR_USER",
+	TestConfigUserEmailKey:       "ROLLBAR_USER_EMAIL",
 	TestConfigAcceptanceTestKey:  resource.TestEnvVar,
 }
 
@@ -71,8 +71,8 @@ func (t *TestConfig) SkipUnlessAccTest(testing *testing.T) {
 	}
 }
 
-func (t *TestConfig) GetUserOrAbort(testing *testing.T) (val string) {
-	return t.GetOrAbort(testing, TestConfigUserKey)
+func (t *TestConfig) GetUserEmailOrAbort(testing *testing.T) (val string) {
+	return t.GetOrAbort(testing, TestConfigUserEmailKey)
 }
 
 func (t *TestConfig) GetPagerDutyAPIKeyorAbort(testing *testing.T) (val string) {

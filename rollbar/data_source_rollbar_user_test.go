@@ -7,7 +7,7 @@ import (
 )
 
 func TestAccDatasourceRollbarUser_Basic(t *testing.T) {
-	userID := testAccConfig.GetUserOrAbort(t)
+	email := testAccConfig.GetUserEmailOrAbort(t)
 
 	resource.Test(t, resource.TestCase{
 		PreCheck: func() {
@@ -16,20 +16,21 @@ func TestAccDatasourceRollbarUser_Basic(t *testing.T) {
 		Providers: testAccProviders,
 		Steps: []resource.TestStep{
 			{
-				Config: testAccCheckRollbarUserWithDatasourceBasic(userID),
+				Config: testAccCheckRollbarUserWithDatasourceBasic(email),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttr(
-						"data.rollbar_user.foobar", "id", userID),
+						"data.rollbar_user.foobar", "email", email),
+					resource.TestCheckResourceAttrSet("data.rollbar_user.foobar", "username"),
 				),
 			},
 		},
 	})
 }
 
-func testAccCheckRollbarUserWithDatasourceBasic(userID string) string {
+func testAccCheckRollbarUserWithDatasourceBasic(email string) string {
 	return fmt.Sprintf(`
 data "rollbar_user" "foobar" {
-  id = "%s"
+  email = "%s"
 }
-`, userID)
+`, email)
 }
