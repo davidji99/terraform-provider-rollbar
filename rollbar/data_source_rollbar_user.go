@@ -1,19 +1,18 @@
 package rollbar
 
-import "github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+import (
+	"fmt"
+	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"strconv"
+)
 
 func dataSourceRollbarUser() *schema.Resource {
 	return &schema.Resource{
 		Read: dataSourceRollbarUserRead,
 		Schema: map[string]*schema.Schema{
-			"id": {
-				Type:     schema.TypeString,
-				Required: true,
-			},
-
 			"email": {
 				Type:     schema.TypeString,
-				Computed: true,
+				Required: true,
 			},
 
 			"username": {
@@ -25,18 +24,26 @@ func dataSourceRollbarUser() *schema.Resource {
 }
 
 func dataSourceRollbarUserRead(d *schema.ResourceData, m interface{}) error {
-	d.SetId(d.Get("id").(string))
-
 	client := m.(*Config).API
 
-	user, _, getErr := client.Users.Get(StringToInt(d.Id()))
+	userEmail := d.Get("email").(string)
+
+	users, _, getErr := client.Users.List()
 	if getErr != nil {
 		return getErr
 	}
 
-	var setErr error
-	setErr = d.Set("email", user.GetResult().GetEmail())
-	setErr = d.Set("username", user.GetResult().GetUsername())
+	for _, user := range users.GetResult().Users {
+		if user.GetEmail() == userEmail {
+			d.SetId(strconv.FormatInt(user.GetID(), 10))
 
-	return setErr
+			var setErr error
+			setErr = d.Set("email", user.GetEmail())
+			setErr = d.Set("username", user.GetUsername())
+
+			return setErr
+		}
+	}
+
+	return fmt.Errorf("could not find user %s in this account", userEmail)
 }

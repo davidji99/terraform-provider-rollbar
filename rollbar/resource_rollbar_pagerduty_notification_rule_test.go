@@ -18,7 +18,7 @@ func TestAccRollbarPagerDutyNotificationRule_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"rollbar_pagerduty_notification_rule.foobar", "rule.0.filter.0.operation", "gte"),
 					resource.TestCheckResourceAttr(
-						"rollbar_pagerduty_notification_rule.foobar", "rule.1.config.service_key", "aG59dD4FtWRfGMNJ3mLcZTK3CC4Qhgas"),
+						"rollbar_pagerduty_notification_rule.foobar", "rule.1.config.0.service_key", "aG59dD4FtWRfGMNJ3mLcZTK3CC4Qhgas"),
 				),
 			},
 		},
@@ -32,7 +32,7 @@ func TestAccRollbarPagerDutyNotificationRule_InvalidTrigger(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccCheckRollbarPagerDutyNotificationRule_InvalidTrigger(),
-				ExpectError: regexp.MustCompile(`only valid value is 'new_item'`),
+				ExpectError: regexp.MustCompile(`expected rule.0.trigger to be one of \[new_item occurrence_rate resolved_item reactivated_item exp_repeat_item\], got new_item123`),
 			},
 		},
 	})
@@ -77,7 +77,7 @@ resource "rollbar_pagerduty_notification_rule" "foobar" {
 			operation = "eq"
 			value = "production"
 		}
-		config = {
+		config {
 			service_key = "aG59dD4FtWRfGMNJ3mLcZTK3CC4Qhgas"
 		}
 	}

@@ -10,7 +10,7 @@ type NotificationsService service
 
 // PDIntegrationRequest represents a request to configure Rollbar with PagerDuty.
 type PDIntegrationRequest struct {
-	Enabled    bool   `json:"enabled,omitempty"`
+	Enabled    bool   `json:"enabled"`
 	ServiceKey string `json:"service_key,omitempty"`
 }
 

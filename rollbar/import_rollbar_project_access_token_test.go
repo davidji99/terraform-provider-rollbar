@@ -25,20 +25,7 @@ func TestAccRollbarProjectAccessToken_importBasic(t *testing.T) {
 				ResourceName:      "rollbar_project_access_token.foobar",
 				ImportStateIdFunc: testAccRollbarProjectAccessTokenImportStateIdFunc("rollbar_project_access_token.foobar"),
 				ImportState:       true,
-				ImportStateCheck: func(s []*terraform.InstanceState) error {
-					if len(s) != 1 {
-						return fmt.Errorf("expected 1 state: %#v", s)
-					}
-
-					rs := s[0]
-
-					// Do a simple check of state since the resource ID is complex
-					if rs.Attributes["access_token"] == "" || rs.Attributes["name"] == "" {
-						return fmt.Errorf("rollbar_project_access_token import not successful")
-					}
-
-					return nil
-				},
+				ImportStateVerify: true,
 			},
 		},
 	})

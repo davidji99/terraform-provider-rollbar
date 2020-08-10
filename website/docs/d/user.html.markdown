@@ -8,13 +8,14 @@ description: |-
 
 # Data Source: rollbar_user
 
-Use this data source to get information about a Rollbar user.
+Use this data source to get information about a Rollbar user. The Rollbar user must be a member of the account
+that is used to authenticate with the provider.
 
 ## Example Usage
 
 ```hcl
 data "rollbar_user" "foobar" {
-  id = "<SOME_USER_ID>"
+  email = "<SOME_USER_EMAIL>"
 }
 ```
 
@@ -22,11 +23,10 @@ data "rollbar_user" "foobar" {
 
 The following arguments are supported:
 
-* `id` - (Required) The user id
+* `email` - (Required) The user email
 
 ## Attributes Reference
 
 The following attributes are exported:
 
-* `email` - The user's email address
 * `username` - The user's username

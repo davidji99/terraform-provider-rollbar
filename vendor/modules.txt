@@ -58,7 +58,7 @@ github.com/bgentry/go-netrc/netrc
 github.com/davecgh/go-spew/spew
 # github.com/davidji99/go-querystring v1.0.2
 github.com/davidji99/go-querystring/query
-# github.com/davidji99/rollrest-go v0.1.4
+# github.com/davidji99/rollrest-go v0.1.5
 ## explicit
 github.com/davidji99/rollrest-go/rollrest
 # github.com/davidji99/simpleresty v0.2.3
