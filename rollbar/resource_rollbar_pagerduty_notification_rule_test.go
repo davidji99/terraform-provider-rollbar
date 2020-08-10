@@ -18,7 +18,7 @@ func TestAccRollbarPagerDutyNotificationRule_Basic(t *testing.T) {
 					resource.TestCheckResourceAttr(
 						"rollbar_pagerduty_notification_rule.foobar", "rule.0.filter.0.operation", "gte"),
 					resource.TestCheckResourceAttr(
-						"rollbar_pagerduty_notification_rule.foobar", "rule.1.config.service_key", "aG59dD4FtWRfGMNJ3mLcZTK3CC4Qhgas"),
+						"rollbar_pagerduty_notification_rule.foobar", "rule.1.config.0.service_key", "aG59dD4FtWRfGMNJ3mLcZTK3CC4Qhgas"),
 				),
 			},
 		},
