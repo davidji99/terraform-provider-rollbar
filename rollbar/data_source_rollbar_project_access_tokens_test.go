@@ -20,13 +20,13 @@ func TestAccDatasourceRollbarProjectAccessToken_Basic(t *testing.T) {
 				Config: testAccCheckRollbarProjectAccessTokenWithDatasourceBasic(name),
 				Check: resource.ComposeTestCheckFunc(
 					resource.TestCheckResourceAttrSet(
-						"data.rollbar_project_access_token.foobar", "access_tokens.post_client_item"),
+						"data.rollbar_project_access_tokens.foobar", "access_tokens.post_client_item"),
 					resource.TestCheckResourceAttrSet(
-						"data.rollbar_project_access_token.foobar", "access_tokens.post_server_item"),
+						"data.rollbar_project_access_tokens.foobar", "access_tokens.post_server_item"),
 					resource.TestCheckResourceAttrSet(
-						"data.rollbar_project_access_token.foobar", "access_tokens.read"),
+						"data.rollbar_project_access_tokens.foobar", "access_tokens.read"),
 					resource.TestCheckResourceAttrSet(
-						"data.rollbar_project_access_token.foobar", "access_tokens.write"),
+						"data.rollbar_project_access_tokens.foobar", "access_tokens.write"),
 				),
 			},
 		},
@@ -39,7 +39,7 @@ resource "rollbar_project" "foobar" {
 	name = "%s"
 }
 
-data "rollbar_project_access_token" "foobar" {
+data "rollbar_project_access_tokens" "foobar" {
   project_id = rollbar_project.foobar.id
 }
 `, projectName)

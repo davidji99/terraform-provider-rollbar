@@ -77,7 +77,7 @@ resource "rollbar_pagerduty_notification_rule" "foobar" {
 			operation = "eq"
 			value = "production"
 		}
-		config = {
+		config {
 			service_key = "aG59dD4FtWRfGMNJ3mLcZTK3CC4Qhgas"
 		}
 	}
