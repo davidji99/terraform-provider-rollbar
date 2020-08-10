@@ -32,7 +32,7 @@ func TestAccRollbarPagerDutyNotificationRule_InvalidTrigger(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccCheckRollbarPagerDutyNotificationRule_InvalidTrigger(),
-				ExpectError: regexp.MustCompile(`only valid value is 'new_item'`),
+				ExpectError: regexp.MustCompile(`expected rule.0.trigger to be one of \[new_item occurrence_rate resolved_item reactivated_item exp_repeat_item\], got new_item123`),
 			},
 		},
 	})
