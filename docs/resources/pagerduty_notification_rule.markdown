@@ -14,9 +14,9 @@ permissions in other to manage this resource. Refer to https://docs.rollbar.com/
 For more information on the supported values when constructing a rule, please visit [this page](https://explorer.docs.rollbar.com/#tag/Notifications/paths/~1api~11~1notifications~1pagerduty~1rules/put).
 
 ~> NOTE: Due to API limitations, it is not possible to selectively `GET`, `DELETE` or `CREATE` a single notification rule.
-Whatever rule(s) you define in your terraform configuration **will be the only rules** present in your account 
-after a `terraform apply`. This is especially important to understand if you have pre-existing rules in your account 
-prior to terraform managing this resource or rules created outside of terraform. In other words, this provider/terraform 
+Whatever rule(s) you define in your terraform configuration **will be the only rules** present in your account
+after a `terraform apply`. This is especially important to understand if you have pre-existing rules in your account
+prior to terraform managing this resource or rules created outside of terraform. In other words, this provider/terraform
 will overwrite any remotely defined rules not in your configuration files. Furthermore, it is strongly advised that you only declare a single `rollbar_pagerduty_notification_rule` across all your terraform configuration files for the reasons above.
 
 ## Example Usage
@@ -63,7 +63,7 @@ The following arguments are supported:
 
     * `filter` - (Required)
 
-        * `type` - (Required) `<string>` The type of rule filter. 
+        * `type` - (Required) `<string>` The type of rule filter.
         Valid options are: `environment`, `level`, `title`, `filename`,`context`, `method`, `framework`, `path`,
         `rate`,`unique_occurrences`.
 
@@ -85,14 +85,15 @@ The following arguments are supported:
 
 #### Rule Explanation
 Certain rule triggers will require certain filters. Here are some of the following requirements:
+
 1. Define a `filter.type` of `rate` when constructing an `occurrence_rate` rule trigger.
 
 Please refer to the official [Rollbar OpenAPI specification](https://explorer.docs.rollbar.com/main.yaml) for more information.
 
 #### Filter Options
 
-As of Feb 11th, 2020, the Rollbar Rest API documentation does not present the available options to the `rule.filter` 
-attribute block in an easily readable manner. Therefore, this section will provide a summary of the available 
+As of Feb 11th, 2020, the Rollbar Rest API documentation does not present the available options to the `rule.filter`
+attribute block in an easily readable manner. Therefore, this section will provide a summary of the available
 options for `rule.filter`:
 
 1. For `filter.type` of `environment`:
@@ -100,12 +101,12 @@ options for `rule.filter`:
     * Valid `filter.value` option(s): any freeform `string`*
 
 1. For `filter.type` of `level`:
-       * Valid `filter.operation` option(s): `eq`, `gte`
-       * Valid `filter.value` option(s): `debug`, `info`, `warning`, `error`, `critical` (case sensitive!)
+    * Valid `filter.operation` option(s): `eq`, `gte`
+    * Valid `filter.value` option(s): `debug`, `info`, `warning`, `error`, `critical` (case sensitive!)
 
 1. For `filter.type` of `title`:
-      * Valid `filter.operation` option(s): `within`, `nwithin`, `regex`, `nregex`
-      * Valid `filter.value` option(s): any freeform `string`*
+    * Valid `filter.operation` option(s): `within`, `nwithin`, `regex`, `nregex`
+    * Valid `filter.value` option(s): any freeform `string`*
       
 1. For `filter.type` of `filename`:
     * Valid `filter.operation` option(s): `within`, `nwithin`, `regex`, `nregex`
@@ -121,7 +122,7 @@ options for `rule.filter`:
 
 1. For `filter.type` of `framework`:
     * Valid `filter.operation` option(s): `eq`
-    * Valid `filter.value` option(s): any freeform `string`*
+    * Valid `filter.value` option(s): any freeform `string`
 
 1. For `filter.type` of `rate`:
     * Valid `filter.period` option(s): Whole number greater than zero
