@@ -42,7 +42,7 @@ resource "rollbar_project" "service-x" {
 ## Authentication
 
 Certain resources in Rollbar require either the `account_access_token` or `project_access_token`. Based on observation,
-the `account_access_token` is used more frequently for this provider's resources. You must supply both tokens 
+the `account_access_token` is used more frequently for this provider's resources. You must supply both tokens
 if your terraform configuration code manages resources that require both access tokens. Otherwise, one access token
 must be supplied to your provider block or sourced from other means.
 

@@ -45,6 +45,7 @@ The following attributes are exported:
 Existing team(s) can be imported using the team id.
 
 For example:
+
 ```
 $ terraform import rollbar_team.follbar <TEAM_ID>
 ```

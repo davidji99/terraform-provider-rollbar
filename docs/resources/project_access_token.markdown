@@ -19,6 +19,7 @@ If you need a higher rate limit, please contact support@rollbar.com.
 
 **NOTE:** As of (August 6th, 2020), the Rollbar API does not provide support for the following
 and therefore cannot be implemented in the provider:
+
 1. Deleting access tokens. Instead, the provider will 'disable' the token by setting its rate limit to 1 call per 30 days
 and remove the resource from your state. Then, the user can delete the token in the Rollbar UI.
 1. Updating a project access token's `name`, `status`, and `scopes`. Users will need to make updates via the UI
@@ -59,10 +60,10 @@ Valid options: `read`, `write`, `post_server_item`, `post_client_server`.
 * `status` - (Required) `<string>` Enable or disable the access token. Valid options: `enabled`, `disabled`.
 
 * `rate_limit_window_size` `<integer>` - Period of time (in seconds) for the rate limit. On **resource creation only**,
-the valid options are the following: `0, 60, 300, 1800, 3600, 86400, 604800, 2592000`. 
+the valid options are the following: `0, 60, 300, 1800, 3600, 86400, 604800, 2592000`.
 Otherwise, any value greater than `0`. If this argument is not set, the default is 60 seconds (1 minute).
 
-* `rate_limit_window_count` `<integer>` - Number of requests for the defined rate limiting period. 
+* `rate_limit_window_count` `<integer>` - Number of requests for the defined rate limiting period.
 Otherwise, any value greater than `0`. If this argument is not set, the default is 5000 calls.
 
 ## Attributes Reference
@@ -81,6 +82,7 @@ and will not be shown in any non-debug `terraform` outputs.
 Existing project access tokens(s) can be imported using a combination of the project id & access token separated by a colon.
 
 For example:
+
 ```
 $ terraform import rollbar_project_access_token.follbar <PROJECT_ID>:<ACCESS_TOKEN>
 ```

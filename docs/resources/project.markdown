@@ -41,6 +41,7 @@ The following attributes are exported:
 Existing project(s) can be imported using the project id.
 
 For example:
+
 ```
 $ terraform import rollbar_project.follbar <PROJECT_ID>
 ```
