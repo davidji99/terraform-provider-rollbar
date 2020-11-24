@@ -107,7 +107,7 @@ options for `rule.filter`:
 1. For `filter.type` of `title`:
     * Valid `filter.operation` option(s): `within`, `nwithin`, `regex`, `nregex`
     * Valid `filter.value` option(s): any freeform `string`*
-      
+
 1. For `filter.type` of `filename`:
     * Valid `filter.operation` option(s): `within`, `nwithin`, `regex`, `nregex`
     * Valid `filter.value` option(s): any freeform `string`*
@@ -140,7 +140,7 @@ For the `filter.type` of `path`, there are two possible setups:
     * Valid `filter.path` option(s): any freeform `string`*
 
 * If you only define `filter.operation` in your terraform configuration _(aka 'path_filter_with_exists)_,
-    * Valid `filter.operation` option(s): `eq`, `gte`, `lte`, `within`, `nwithin`, `neq`, `regex`, `nregex`, `startswith`, 
+    * Valid `filter.operation` option(s): `eq`, `gte`, `lte`, `within`, `nwithin`, `neq`, `regex`, `nregex`, `startswith`,
     `exists`, `nexists`
     * Valid `filter.value` option(s): any freeform `string`* & is Optional.
     * Valid `filter.path` option(s): any freeform `string`*
