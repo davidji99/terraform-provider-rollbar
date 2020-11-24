@@ -8,7 +8,7 @@ description: |-
 
 # Rollbar Provider
 
-The Rollbar provider is used to interact with the resources provided by [Rollbar API](https://docs.rollbar.com/reference).
+The Rollbar provider is used to interact with the resources provided by [Rollbar API](https://explorer.docs.rollbar.com/).
 and needs to be configured with credentials before it can be used. This provider has been developed
 using the [terraform sdk](https://github.com/hashicorp/terraform-plugin-sdk) and is recommended to be used with `terraform v0.12.X+`.
 
