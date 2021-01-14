@@ -39,7 +39,7 @@ func resourceRollbarProjectAccessToken() *schema.Resource {
 				Elem: &schema.Schema{
 					Type: schema.TypeString,
 					ValidateFunc: validation.StringInSlice(
-						[]string{"read", "write", "post_server_item", "post_client_server"}, false),
+						[]string{"read", "write", "post_server_item", "post_client_item"}, false),
 				},
 			},
 
