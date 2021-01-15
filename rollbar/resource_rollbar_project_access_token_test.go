@@ -48,7 +48,7 @@ func TestAccRollbarProjectAccessToken_InvalidScopes(t *testing.T) {
 		Steps: []resource.TestStep{
 			{
 				Config:      testAccCheckRollbarProjectAccessToken_InvalidScopes(projectName, tokenName),
-				ExpectError: regexp.MustCompile(`.*to be one of \[read write post_server_item post_client_server].*`),
+				ExpectError: regexp.MustCompile(`.*to be one of \[read write post_server_item post_client_item].*`),
 			},
 		},
 	})

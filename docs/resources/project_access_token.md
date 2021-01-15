@@ -55,7 +55,7 @@ The following arguments are supported:
 * `name` - (Required) `<string>` Name of the project access token. Max length 32 characters.
 
 * `scopes` - (Required) `<list(string)>` Scopes to assign to the create access token.
-Valid options: `read`, `write`, `post_server_item`, `post_client_server`.
+Valid options: `read`, `write`, `post_server_item`, `post_client_item`.
 
 * `status` - (Required) `<string>` Enable or disable the access token. Valid options: `enabled`, `disabled`.
 
