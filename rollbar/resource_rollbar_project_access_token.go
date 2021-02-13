@@ -92,8 +92,8 @@ func resourceRollbarProjectAccessTokenImport(d *schema.ResourceData, meta interf
 		return nil, parseErr
 	}
 
-	d.Set("access_token", accessToken)
 	d.Set("project_id", StringToInt(projectID))
+	d.Set("access_token", accessToken)
 
 	d.SetId(GenerateRandomResourceID())
 
