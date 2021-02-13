@@ -37,11 +37,10 @@ func dataSourceRollbarUserRead(d *schema.ResourceData, m interface{}) error {
 		if user.GetEmail() == userEmail {
 			d.SetId(strconv.FormatInt(user.GetID(), 10))
 
-			var setErr error
-			setErr = d.Set("email", user.GetEmail())
-			setErr = d.Set("username", user.GetUsername())
+			d.Set("email", user.GetEmail())
+			d.Set("username", user.GetUsername())
 
-			return setErr
+			return nil
 		}
 	}
 

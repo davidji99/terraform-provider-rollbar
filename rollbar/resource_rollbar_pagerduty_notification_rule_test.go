@@ -1,7 +1,6 @@
 package rollbar
 
 import (
-	"fmt"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/resource"
 	"regexp"
 	"testing"
@@ -39,7 +38,7 @@ func TestAccRollbarPagerDutyNotificationRule_InvalidTrigger(t *testing.T) {
 }
 
 func testAccCheckRollbarPagerDutyNotificationRule_InvalidTrigger() string {
-	return fmt.Sprintf(`
+	return `
 resource "rollbar_pagerduty_notification_rule" "foobar" {
 	rule {
 		trigger = "new_item123"
@@ -50,11 +49,11 @@ resource "rollbar_pagerduty_notification_rule" "foobar" {
 		}
 	}
 }
-`)
+`
 }
 
 func testAccCheckRollbarPagerDutyNotificationRule_basic() string {
-	return fmt.Sprintf(`
+	return `
 resource "rollbar_pagerduty_notification_rule" "foobar" {
 	rule {
 		trigger = "new_item"
@@ -82,5 +81,5 @@ resource "rollbar_pagerduty_notification_rule" "foobar" {
 		}
 	}
 }
-`)
+`
 }

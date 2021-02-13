@@ -84,11 +84,10 @@ func resourceRollbarPagerDutyIntegrationCreate(d *schema.ResourceData, meta inte
 
 func resourceRollbarPagerDutyIntegrationRead(d *schema.ResourceData, meta interface{}) error {
 	// There is no GET API endpoint so state will set whatever value is defined in the user's configuration.
-	var setErr error
-	setErr = d.Set("service_key", d.Get("service_key"))
-	setErr = d.Set("enabled", d.Get("enabled"))
+	d.Set("service_key", d.Get("service_key"))
+	d.Set("enabled", d.Get("enabled"))
 
-	return setErr
+	return nil
 }
 
 func resourceRollbarPagerDutyIntegrationDelete(d *schema.ResourceData, meta interface{}) error {

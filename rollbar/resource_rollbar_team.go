@@ -84,12 +84,11 @@ func resourceRollbarTeamRead(d *schema.ResourceData, meta interface{}) error {
 		return getErr
 	}
 
-	var setErr error
-	setErr = d.Set("name", team.GetResult().GetName())
-	setErr = d.Set("access_level", team.GetResult().GetAccessLevel())
-	setErr = d.Set("account_id", team.GetResult().GetAccountID())
+	d.Set("name", team.GetResult().GetName())
+	d.Set("access_level", team.GetResult().GetAccessLevel())
+	d.Set("account_id", team.GetResult().GetAccountID())
 
-	return setErr
+	return nil
 }
 
 func resourceRollbarTeamDelete(d *schema.ResourceData, meta interface{}) error {
