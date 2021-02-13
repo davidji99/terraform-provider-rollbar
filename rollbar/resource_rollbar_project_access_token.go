@@ -92,12 +92,8 @@ func resourceRollbarProjectAccessTokenImport(d *schema.ResourceData, meta interf
 		return nil, parseErr
 	}
 
-	var setErr error
-	setErr = d.Set("access_token", accessToken)
-	setErr = d.Set("project_id", StringToInt(projectID))
-	if setErr != nil {
-		return nil, setErr
-	}
+	d.Set("access_token", accessToken)
+	d.Set("project_id", StringToInt(projectID))
 
 	d.SetId(GenerateRandomResourceID())
 
@@ -192,18 +188,17 @@ func resourceRollbarProjectAccessTokenRead(d *schema.ResourceData, meta interfac
 		return getErr
 	}
 
-	var setErr error
-	setErr = d.Set("project_id", pat.GetProjectID())
-	setErr = d.Set("name", pat.GetName())
-	setErr = d.Set("scopes", pat.Scopes)
-	setErr = d.Set("status", pat.GetStatus())
-	setErr = d.Set("rate_limit_window_size", pat.GetRateLimitWindowSize())
-	setErr = d.Set("rate_limit_window_count", pat.GetRateLimitWindowCount())
-	setErr = d.Set("cur_rate_limit_window_count", pat.GetCurrentRateLimitWindowCount())
-	setErr = d.Set("date_created", int(pat.GetDataCreated()))
-	setErr = d.Set("access_token", pat.GetAccessToken())
+	d.Set("project_id", pat.GetProjectID())
+	d.Set("name", pat.GetName())
+	d.Set("scopes", pat.Scopes)
+	d.Set("status", pat.GetStatus())
+	d.Set("rate_limit_window_size", pat.GetRateLimitWindowSize())
+	d.Set("rate_limit_window_count", pat.GetRateLimitWindowCount())
+	d.Set("cur_rate_limit_window_count", pat.GetCurrentRateLimitWindowCount())
+	d.Set("date_created", int(pat.GetDataCreated()))
+	d.Set("access_token", pat.GetAccessToken())
 
-	return setErr
+	return nil
 }
 
 func resourceRollbarProjectAccessTokenUpdate(d *schema.ResourceData, meta interface{}) error {

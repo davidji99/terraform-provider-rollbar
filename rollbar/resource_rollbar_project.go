@@ -80,12 +80,11 @@ func resourceRollbarProjectRead(d *schema.ResourceData, meta interface{}) error 
 		return getErr
 	}
 
-	var setErr error
-	setErr = d.Set("name", project.GetResult().GetName())
-	setErr = d.Set("status", project.GetResult().GetStatus())
-	setErr = d.Set("account_id", project.GetResult().GetAccountID())
+	d.Set("name", project.GetResult().GetName())
+	d.Set("status", project.GetResult().GetStatus())
+	d.Set("account_id", project.GetResult().GetAccountID())
 
-	return setErr
+	return nil
 }
 
 func resourceRollbarProjectDelete(d *schema.ResourceData, meta interface{}) error {
