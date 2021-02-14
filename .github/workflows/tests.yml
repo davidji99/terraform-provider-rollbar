@@ -1,7 +1,5 @@
 name: tests
-on: [pull_request]
-env:
-  GO111MODULE: on
+on: [pull_request, push]
 
 jobs:
   test:
@@ -10,13 +8,13 @@ jobs:
         go-version: [1.14.x, 1.15.x]
         platform: [ubuntu-latest]
     runs-on: ${{ matrix.platform }}
-    
+
     steps:
       - uses: actions/setup-go@v1
         with:
           go-version: ${{ matrix.go-version }}
-      - uses: actions/checkout@v2
-      
+      - uses: actions/checkout@v2.3.4
+
       - name: Cache go modules
         uses: actions/cache@v2.1.4
         with:
@@ -29,7 +27,7 @@ jobs:
         run: |
           make fmt
           git diff --exit-code; code=$?; git checkout -- .; (exit $code)
-        
+
       - name: Run go vet
         run: go vet ./...
 
