@@ -21,7 +21,7 @@ resource cannot import existing rules due to API limitations.
 
 ## Example Usage
 
-```hcl
+```hcl-terraform
 # Create a new Rollbar PagerDuty Integration
 resource "rollbar_pagerduty_integration" "pd" {
 	service_key = "SOME_VALID_PD_KEY"

@@ -13,9 +13,9 @@ that is used to authenticate with the provider.
 
 ## Example Usage
 
-```hcl
+```hcl-terraform
 data "rollbar_user" "foobar" {
-  email = "<SOME_USER_EMAIL>"
+  email = "user@email.com"
 }
 ```
 

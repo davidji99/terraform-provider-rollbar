@@ -21,7 +21,7 @@ will overwrite any remotely defined rules not in your configuration files. Furth
 
 ## Example Usage
 
-```hcl
+```hcl-terraform
 # Create a new Rollbar PagerDuty notification rule
 resource "rollbar_pagerduty_notification_rule" "foobar" {
 	rule {

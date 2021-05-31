@@ -87,7 +87,7 @@ func resourceRollbarProjectAccessTokenImport(d *schema.ResourceData, meta interf
 	// To import this resource, users must pass in the project ID & access token as the 'ID'.
 	// We then proceed to set one half of the import ID as the "access_token"
 	// before generating a random string number to set as the real resource ID in state.
-	projectID, accessToken, parseErr := ParseCompositeID(d.Id())
+	projectID, accessToken, parseErr := ParseCompositeImportID(d.Id())
 	if parseErr != nil {
 		return nil, parseErr
 	}
@@ -247,18 +247,6 @@ func resourceRollbarProjectAccessTokenDelete(d *schema.ResourceData, meta interf
 	d.SetId("")
 
 	return nil
-}
-
-// getProjectID is a helper method to get the project id.
-func getProjectID(d *schema.ResourceData) int {
-	var projectID int
-	if v, ok := d.GetOk("project_id"); ok {
-		vs := v.(int)
-		log.Printf("[DEBUG] Project id: %d", vs)
-		projectID = vs
-	}
-
-	return projectID
 }
 
 // getAccessToken is a helper method to get the access token.

@@ -18,7 +18,7 @@ func TestInt64ToString_Basic(t *testing.T) {
 }
 
 func TestParseCompositeID_Valid(t *testing.T) {
-	s1, s2, parseErr := ParseCompositeID("hello:moto")
+	s1, s2, parseErr := ParseCompositeImportID("hello:moto")
 
 	assert.Nil(t, parseErr)
 	assert.Equal(t, "hello", s1)
@@ -26,6 +26,6 @@ func TestParseCompositeID_Valid(t *testing.T) {
 }
 
 func TestParseCompositeID_Invalid(t *testing.T) {
-	_, _, parseErr := ParseCompositeID("hello:moto:again")
+	_, _, parseErr := ParseCompositeImportID("hello:moto:again")
 	assert.NotNil(t, parseErr)
 }

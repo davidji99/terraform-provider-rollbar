@@ -9,21 +9,6 @@ description: |-
 # Rollbar Provider
 
 The Rollbar provider is used to interact with the resources provided by [Rollbar API](https://explorer.docs.rollbar.com/).
-and needs to be configured with credentials before it can be used. This provider has been developed
-using the [terraform sdk](https://github.com/hashicorp/terraform-plugin-sdk) and is recommended to be used with `terraform v0.12.X+`.
-
-## Background
-
-[Rollbar](https://rollbar.com) automates error monitoring and triaging, so developers can fix errors that matter within minutes,
-and build software quickly and painlessly.
-
-## Contributing
-
-Development happens in the [GitHub repo](https://github.com/davidji99/terraform-provider-rollbar):
-
-* [Releases](https://github.com/davidji99/terraform-provider-rollbar/releases)
-* [Changelog](https://github.com/davidji99/terraform-provider-rollbar/blob/master/CHANGELOG.md)
-* [Issues](https://github.com/davidji99/terraform-provider-rollbar/issues)
 
 ## Example Usage
 
@@ -84,11 +69,11 @@ Refreshing Terraform state in-memory prior to plan...
 The following arguments are supported:
 
 * `account_access_token` - (Required) Rollbar account access token. It can be provided, but it can also
-be sourced from [other locations](#Authentication). This token **MUST** have read & write permissions enabled
+be sourced from [other locations](#Authentication). This token **MUST** have read & write permissions enabled,
 so the provider can completely manage supported resources.
 
 * `project_access_token` - (Required) Rollbar project access token. It can be provided, but it can also
-be sourced from [other locations](#Authentication). This token **MUST** have read & write permissions enabled
+be sourced from [other locations](#Authentication). This token **MUST** have read & write permissions enabled,
 so the provider can completely manage supported resources.
 
 * `headers` - (Optional) Additional API headers.

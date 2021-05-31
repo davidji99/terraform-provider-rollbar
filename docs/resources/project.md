@@ -16,7 +16,7 @@ the project name. Otherwise, your `terraform plan` will detect if a difference b
 
 ## Example Usage
 
-```hcl
+```hcl-terraform
 # Create a new Rollbar project
 resource "rollbar_project" "follbar" {
     name = "my_new_project"
