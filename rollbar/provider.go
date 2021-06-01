@@ -49,6 +49,7 @@ func Provider() *schema.Provider {
 			"rollbar_project":                     resourceRollbarProject(),
 			"rollbar_project_access_token":        resourceRollbarProjectAccessToken(),
 			"rollbar_team":                        resourceRollbarTeam(),
+			"rollbar_team_project_association":    resourceRollbarTeamProjectAssociation(),
 		},
 
 		ConfigureContextFunc: providerConfigure,

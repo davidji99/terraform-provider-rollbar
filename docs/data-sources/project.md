@@ -12,9 +12,9 @@ Use this data source to get information about a Rollbar Project.
 
 ## Example Usage
 
-```hcl
+```hcl-terraform
 data "rollbar_project" "foobar" {
-  name = "<SOME_PROJECT_NAME>"
+  name = "my_project"
 }
 ```
 

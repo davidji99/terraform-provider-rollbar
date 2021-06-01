@@ -5,21 +5,19 @@ Terraform Provider Rollbar
 
 This provider is used to configure certain resources supported by [Rollbar API](https://docs.rollbar.com/reference).
 
-**NOTE**: This provider is unofficial and not created by the Rollbar team.
-If you have questions about Rollbar functionality, please kindly refer to the [Rollbar API documentation](https://explorer.docs.rollbar.com/).
-
 For provider bugs/questions, please open an issue on this repository.
 
 Documentation
 ------------
 
-Documentation about resources and data sources can be found [here](https://registry.terraform.io/providers/davidji99/rollbar/latest/docs).
+Documentation about resources and data sources can be found
+[here](https://registry.terraform.io/providers/davidji99/rollbar/latest/docs).
 
 Requirements
 ------------
 
 - [Terraform](https://www.terraform.io/downloads.html) `v0.12+`. (No support for terraform `v0.11`)
-- [Go](https://golang.org/doc/install) `v1.14` (to build the provider plugin)
+- [Go](https://golang.org/doc/install) `v1.16` (to build the provider plugin)
 
 Usage
 -----

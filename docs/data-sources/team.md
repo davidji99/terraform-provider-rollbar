@@ -12,9 +12,9 @@ Use this data source to get information about a Rollbar Team.
 
 ## Example Usage
 
-```hcl
+```hcl-terraform
 data "rollbar_team" "foobar" {
-  id = "<SOME_TEAM_ID>"
+  id = "my_team"
 }
 ```
 

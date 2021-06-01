@@ -30,7 +30,7 @@ Please also note that a project, by default, comes with four project access toke
 
 ## Example Usage
 
-```hcl
+```hcl-terraform
 # Create a new Rollbar project access token
 resource "rollbar_project" "foobar" {
 	name = "new_project"

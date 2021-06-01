@@ -1,6 +1,6 @@
 module github.com/davidji99/terraform-provider-rollbar
 
-go 1.14
+go 1.16
 
 require (
 	github.com/davidji99/rollrest-go v0.1.5

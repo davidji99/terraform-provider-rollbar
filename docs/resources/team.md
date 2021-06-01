@@ -16,7 +16,7 @@ the team name. Otherwise, your `terraform plan` will detect if a difference betw
 
 ## Example Usage
 
-```hcl
+```hcl-terraform
 # Create a new Rollbar team
 resource "rollbar_team" "follbar" {
     name = "my_new_team"

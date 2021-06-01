@@ -15,7 +15,7 @@ it is recommended to use data source to reference them in your terraform configu
 
 ## Example Usage
 
-```hcl
+```hcl-terraform
 resource "rollbar_project" "foobar" {
 	name = "some_project"
 }
