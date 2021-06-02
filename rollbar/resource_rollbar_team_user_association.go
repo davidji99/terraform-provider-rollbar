@@ -14,6 +14,11 @@ import (
 const (
 	TeamUserAddedStatus   = "added"
 	TeamUserInvitedStatus = "invited"
+
+	InviteStatusPending   = "pending"
+	InviteStatusAccepted  = "accepted"
+	InviteStatusRejected  = "rejected"
+	InviteStatusCancelled = "canceled"
 )
 
 func resourceRollbarTeamUserAssociation() *schema.Resource {
@@ -199,7 +204,7 @@ func resourceRollbarTeamUserAssociationRead(ctx context.Context, d *schema.Resou
 	d.Set("email", email)
 	d.Set("invitation_status", "")
 
-	if invitedOrAdded == TeamUserAddedStatus || d.Get("invitation_status").(string) == "accepted" {
+	if invitedOrAdded == TeamUserAddedStatus || d.Get("invitation_status").(string) == InviteStatusAccepted {
 		user, _, userFindErr := findUserByEmail(client, email)
 		if userFindErr != nil {
 			diags = append(diags, diag.Diagnostic{
@@ -223,6 +228,13 @@ func resourceRollbarTeamUserAssociationRead(ctx context.Context, d *schema.Resou
 			})
 			return diags
 		}
+
+		// Remove resource from state to trigger recreation if invitation is cancelled or rejected.
+		if inviteStatus.GetResult().GetStatus() == InviteStatusRejected || inviteStatus.GetResult().GetStatus() == InviteStatusCancelled {
+			d.SetId("")
+			return nil
+		}
+
 		d.Set("invitation_status", inviteStatus.GetResult().GetStatus())
 	}
 
@@ -247,7 +259,7 @@ func resourceRollbarTeamUserAssociationDelete(ctx context.Context, d *schema.Res
 	email := result[1]
 	invitedOrAdded := d.Get("invited_or_added").(string)
 
-	if invitedOrAdded == TeamUserInvitedStatus {
+	if invitedOrAdded == TeamUserInvitedStatus && d.Get("invitation_status").(string) == InviteStatusPending {
 		inviteID := d.Get("invitation_id").(int)
 
 		log.Printf("[DEBUG] Cancelling invitation %d", inviteID)
@@ -261,7 +273,7 @@ func resourceRollbarTeamUserAssociationDelete(ctx context.Context, d *schema.Res
 		log.Printf("[DEBUG] Cancelled invitation %d", inviteID)
 	}
 
-	if invitedOrAdded == TeamUserAddedStatus {
+	if invitedOrAdded == TeamUserAddedStatus || d.Get("invitation_status").(string) == InviteStatusAccepted {
 		log.Printf("[DEBUG] Removing %s from team %d", email, teamID)
 
 		_, _, removeErr := client.Teams.RemoveUser(teamID, d.Get("user_id").(int))
