@@ -10,7 +10,8 @@ description: |-
 
 This resource is used to create and manage teams on Rollbar.
 
-**NOTE:** The Rollbar API does not support updating existing teams, only through the UI.
+-> **IMPORTANT!**
+The Rollbar API does not support updating existing teams, only through the UI.
 Therefore, you must update your configuration file(s) for this resource if you manually updated
 the team name. Otherwise, your `terraform plan` will detect if a difference between the state file and remote.
 
@@ -18,7 +19,7 @@ the team name. Otherwise, your `terraform plan` will detect if a difference betw
 
 ```hcl-terraform
 # Create a new Rollbar team
-resource "rollbar_team" "follbar" {
+resource "rollbar_team" "foobar" {
     name = "my_new_team"
     access_level = "standard"
 }
@@ -29,7 +30,6 @@ resource "rollbar_team" "follbar" {
 The following arguments are supported:
 
 * `name` - (Required) `<string>` Name of the team.
-
 * `access_level` - (Required) `<string>` Access level of the team. Valid options: `standard`, `light`, `view`.
 `standard` is the only access level you can choose in the UI. `light` and `view` are API-only team access levels.
 `light` gives the team read and write access, but not to all settings. `view` gives the team read-only access.

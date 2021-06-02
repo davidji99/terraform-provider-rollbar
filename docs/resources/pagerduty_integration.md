@@ -34,7 +34,6 @@ resource "rollbar_pagerduty_integration" "pd" {
 The following arguments are supported:
 
 * `service_key` - (Required) `<string>` Valid PagerDuty Service API Key. Must 32 characters long.
-
 * `enabled` - (Required) `<boolean>` Enable the PagerDuty notifications globally
 
 ## Attributes Reference

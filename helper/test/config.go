@@ -9,15 +9,21 @@ import (
 
 const (
 	TestConfigAccountAccessToken TestConfigKey = iota
+	TestConfigProjectAccessToken
 	TestConfigAcceptanceTestKey
 	TestConfigPagerDutyAPIKey
 	TestConfigUserEmailKey
+	TestConfigTeamID
+	TestConfigEmailAddress
 )
 
 var testConfigKeyToEnvName = map[TestConfigKey]string{
 	TestConfigAccountAccessToken: "ROLLBAR_ACCOUNT_ACCESS_TOKEN",
+	TestConfigProjectAccessToken: "ROLLBAR_PROJECT_ACCESS_TOKEN",
 	TestConfigPagerDutyAPIKey:    "ROLLBAR_PD_API_KEY",
 	TestConfigUserEmailKey:       "ROLLBAR_USER_EMAIL",
+	TestConfigTeamID:             "ROLLBAR_TEAM_ID",
+	TestConfigEmailAddress:       "ROLLBAR_EMAIL_ADDRESS",
 	TestConfigAcceptanceTestKey:  resource.TestEnvVar,
 }
 
@@ -77,4 +83,12 @@ func (t *TestConfig) GetUserEmailOrAbort(testing *testing.T) (val string) {
 
 func (t *TestConfig) GetPagerDutyAPIKeyorAbort(testing *testing.T) (val string) {
 	return t.GetOrAbort(testing, TestConfigPagerDutyAPIKey)
+}
+
+func (t *TestConfig) GetTeamIDorAbort(testing *testing.T) (val string) {
+	return t.GetOrAbort(testing, TestConfigTeamID)
+}
+
+func (t *TestConfig) GetTeamEmailAddress(testing *testing.T) (val string) {
+	return t.GetOrAbort(testing, TestConfigEmailAddress)
 }

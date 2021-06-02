@@ -10,6 +10,18 @@ import (
 	"time"
 )
 
+// getEmail extracts the email attribute generically from a Rollbar resource.
+func getEmail(d *schema.ResourceData) string {
+	var email string
+	if v, ok := d.GetOk("email"); ok {
+		vs := v.(string)
+		log.Printf("[DEBUG] email: %s", vs)
+		email = vs
+	}
+
+	return email
+}
+
 // getTeamID extracts the team ID attribute generically from a Rollbar resource.
 func getTeamID(d *schema.ResourceData) int {
 	var teamID int

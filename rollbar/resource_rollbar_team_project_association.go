@@ -75,7 +75,7 @@ func resourceRollbarTeamProjectAssociationCreate(ctx context.Context, d *schema.
 
 	d.SetId(fmt.Sprintf("%d:%d", int(result.GetResult().GetTeamID()), int(result.GetResult().GetProjectID())))
 
-	return diags
+	return resourceRollbarTeamProjectAssociationRead(ctx, d, meta)
 }
 
 func resourceRollbarTeamProjectAssociationRead(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {

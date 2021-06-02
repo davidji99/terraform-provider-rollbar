@@ -41,3 +41,5 @@ jobs:
           ROLLBAR_PD_API_KEY: ${{ secrets.ROLLBAR_PD_API_KEY }}
           ROLLBAR_PROJECT_ACCESS_TOKEN: ${{ secrets.ROLLBAR_PROJECT_ACCESS_TOKEN }}
           ROLLBAR_USER_EMAIL: ${{ secrets.ROLLBAR_USER_EMAIL }}
+          ROLLBAR_TEAM_ID: ${{ secrets.ROLLBAR_TEAM_ID }}
+          ROLLBAR_EMAIL_ADDRESS: ${{ secrets.ROLLBAR_EMAIL_ADDRESS }}
