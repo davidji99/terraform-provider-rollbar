@@ -6,13 +6,14 @@ description: |-
 Provides a resource to create and manage the association between a team and user.
 ---
 
-# rollbar_team_project_association
+# rollbar_team_user_association
 
 This resource is used to create and manage the association between a team and user.
 
 ### Unique resource lifecycle
 
 If the specified `email` belongs to a new user:
+
 * For resource creation, an invitation will be sent to the user to create a Rollbar account.
   Once the account is created, the user will join the team.
 * For resource deletion, if the invitation has been accepted, and the user has joined the team,
@@ -20,6 +21,7 @@ If the specified `email` belongs to a new user:
   will be revoked.
 
 If the specified `email` belongs to an existing Rollbar user:
+
 * For resource creation, the user will be immediately added to the team.
 * For resource deletion, the user will be removed from the team.
 

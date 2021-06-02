@@ -91,7 +91,7 @@ func resourceRollbarTeamUserAssociationImport(ctx context.Context, d *schema.Res
 		return nil, fmt.Errorf("cannot import - user %d has not been added to team %d", userID, teamID)
 	}
 
-	d.SetId(constructTeamUserResourceID(teamID, email, TeamUserAddedStatus))
+	d.SetId(constructTeamUserResourceID(teamID, email))
 	d.Set("email", email)
 	d.Set("user_id", int(user.GetID()))
 	d.Set("invited_or_added", TeamUserAddedStatus)
@@ -116,8 +116,8 @@ func findUserByEmail(client *rollrest.Client, email string) (*rollrest.User, boo
 	return nil, false, nil
 }
 
-func constructTeamUserResourceID(teamID int, email, status string) string {
-	return fmt.Sprintf("%d:%s:%s", teamID, email, status)
+func constructTeamUserResourceID(teamID int, email string) string {
+	return fmt.Sprintf("%d:%s", teamID, email)
 }
 
 func resourceRollbarTeamUserAssociationCreate(ctx context.Context, d *schema.ResourceData, meta interface{}) diag.Diagnostics {
@@ -146,14 +146,14 @@ func resourceRollbarTeamUserAssociationCreate(ctx context.Context, d *schema.Res
 	// If the invite response returns the following message string, the email address belongs to an existing Rollbar user,
 	// and that user will be immediately added to the team.
 	if regexp.MustCompile(`given email address has been added`).MatchString(inviteResponse.GetMessage()) {
-		resourceID = constructTeamUserResourceID(teamID, email, TeamUserAddedStatus)
+		resourceID = constructTeamUserResourceID(teamID, email)
 		invitedOrAdded = TeamUserAddedStatus
 	}
 
 	// If the invite response returns an invitation, the email address has been sent an invitation and the user needs
 	// to accept it before being added to the team.
 	if inviteResponse.GetResult() != nil {
-		resourceID = constructTeamUserResourceID(teamID, email, TeamUserInvitedStatus)
+		resourceID = constructTeamUserResourceID(teamID, email)
 		invitedOrAdded = TeamUserInvitedStatus
 	}
 
@@ -181,7 +181,7 @@ func resourceRollbarTeamUserAssociationRead(ctx context.Context, d *schema.Resou
 	var diags diag.Diagnostics
 	client := meta.(*Config).API
 
-	result, parseErr := ParseCompositeID(d.Id(), 3)
+	result, parseErr := ParseCompositeID(d.Id(), 2)
 	if parseErr != nil {
 		diags = append(diags, diag.Diagnostic{
 			Severity: diag.Error,
@@ -193,13 +193,13 @@ func resourceRollbarTeamUserAssociationRead(ctx context.Context, d *schema.Resou
 
 	teamID, _ := strconv.Atoi(result[0])
 	email := result[1]
-	status := result[2]
+	invitedOrAdded := d.Get("invited_or_added").(string)
 
 	d.Set("team_id", teamID)
 	d.Set("email", email)
 	d.Set("invitation_status", "")
 
-	if status == TeamUserAddedStatus || d.Get("invitation_status").(string) == "accepted" {
+	if invitedOrAdded == TeamUserAddedStatus || d.Get("invitation_status").(string) == "accepted" {
 		user, _, userFindErr := findUserByEmail(client, email)
 		if userFindErr != nil {
 			diags = append(diags, diag.Diagnostic{
@@ -212,7 +212,7 @@ func resourceRollbarTeamUserAssociationRead(ctx context.Context, d *schema.Resou
 		d.Set("user_id", int(user.GetID()))
 	}
 
-	if status == TeamUserInvitedStatus {
+	if invitedOrAdded == TeamUserInvitedStatus {
 		inviteID := d.Get("invitation_id").(int)
 		inviteStatus, _, statusErr := client.Invitations.Get(inviteID)
 		if statusErr != nil {
@@ -233,7 +233,7 @@ func resourceRollbarTeamUserAssociationDelete(ctx context.Context, d *schema.Res
 	var diags diag.Diagnostics
 	client := meta.(*Config).API
 
-	result, parseErr := ParseCompositeID(d.Id(), 3)
+	result, parseErr := ParseCompositeID(d.Id(), 2)
 	if parseErr != nil {
 		diags = append(diags, diag.Diagnostic{
 			Severity: diag.Error,
@@ -245,9 +245,9 @@ func resourceRollbarTeamUserAssociationDelete(ctx context.Context, d *schema.Res
 
 	teamID, _ := strconv.Atoi(result[0])
 	email := result[1]
-	status := result[2]
+	invitedOrAdded := d.Get("invited_or_added").(string)
 
-	if status == TeamUserInvitedStatus {
+	if invitedOrAdded == TeamUserInvitedStatus {
 		inviteID := d.Get("invitation_id").(int)
 
 		log.Printf("[DEBUG] Cancelling invitation %d", inviteID)
@@ -261,7 +261,7 @@ func resourceRollbarTeamUserAssociationDelete(ctx context.Context, d *schema.Res
 		log.Printf("[DEBUG] Cancelled invitation %d", inviteID)
 	}
 
-	if status == TeamUserAddedStatus {
+	if invitedOrAdded == TeamUserAddedStatus {
 		log.Printf("[DEBUG] Removing %s from team %d", email, teamID)
 
 		_, _, removeErr := client.Teams.RemoveUser(teamID, d.Get("user_id").(int))
