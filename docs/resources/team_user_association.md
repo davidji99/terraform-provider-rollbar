@@ -19,6 +19,9 @@ If the specified `email` belongs to a new user:
 * For resource deletion, if the invitation has been accepted, and the user has joined the team,
   the user will be removed from the team. If the invitation has not been accepted, the invitation
   will be revoked.
+* For resource state refresh, if the invitation was either cancelled or rejected, a new invitation
+  will be sent out on the next resource creation unless the associated Terraform code is removed
+  from your configuration.
 
 If the specified `email` belongs to an existing Rollbar user:
 
