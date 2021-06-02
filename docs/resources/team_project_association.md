@@ -33,7 +33,6 @@ resource "rollbar_team_project_association" "foobar" {
 The following arguments are supported:
 
 * `team_id` - (Required) `<string>` ID of existing team.
-
 * `project_id` - (Required) `<string>` ID of existing project.
 
 ## Attributes Reference

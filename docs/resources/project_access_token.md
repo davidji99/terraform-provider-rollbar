@@ -51,18 +51,13 @@ resource "rollbar_project_access_token" "foobar" {
 The following arguments are supported:
 
 * `project_id` - (Required) `<string>` The ID of the project
-
 * `name` - (Required) `<string>` Name of the project access token. Max length 32 characters.
-
 * `scopes` - (Required) `<list(string)>` Scopes to assign to the create access token.
 Valid options: `read`, `write`, `post_server_item`, `post_client_item`.
-
 * `status` - (Required) `<string>` Enable or disable the access token. Valid options: `enabled`, `disabled`.
-
 * `rate_limit_window_size` `<integer>` - Period of time (in seconds) for the rate limit. On **resource creation only**,
 the valid options are the following: `0, 60, 300, 1800, 3600, 86400, 604800, 2592000`.
 Otherwise, any value greater than `0`. If this argument is not set, the default is 60 seconds (1 minute).
-
 * `rate_limit_window_count` `<integer>` - Number of requests for the defined rate limiting period.
 Otherwise, any value greater than `0`. If this argument is not set, the default is 5000 calls.
 
@@ -71,9 +66,7 @@ Otherwise, any value greater than `0`. If this argument is not set, the default 
 The following attributes are exported:
 
 * `cur_rate_limit_window_count` - How many remaining API calls are left for the access token.
-
 * `date_created` - The timestamp in epoch of when the token was created.
-
 * `access_token` - The actual access token. This value is set to `Sensitive`
 and will not be shown in any non-debug `terraform` outputs.
 

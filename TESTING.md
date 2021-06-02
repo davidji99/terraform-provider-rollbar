@@ -33,7 +33,11 @@ The following parameters are available for running the test. The absence of some
 
 * **TF_ACC** (`integer`) **Required** - must be set to `1`.
 * **ROLLBAR_ACCOUNT_ACCESS_TOKEN** (`string`) - The account access token of the user running the test.
-* **ROLLBAR_PROJECT_ACCESS_TOKEN** (`string`) - The account access token of the user running the test.
+* **ROLLBAR_PROJECT_ACCESS_TOKEN** (`string`) - The project access token of the user running the test.
+* **ROLLBAR_PD_API_KEY** (`string`) - A PagerDuty API key.
+* **ROLLBAR_USER_EMAIL** (`string`) - A Rollbar user email address.
+* **ROLLBAR_TEAM_ID** (`string`) - The ID of a rollbar team.
+* **ROLLBAR_EMAIL_ADDRESS** (`string`) - An email address.
 
 Please note: if you run the entire acceptance suite, you will need to set BOTH `ROLLBAR_ACCOUNT_ACCESS_TOKEN` & `ROLLBAR_PROJECT_ACCESS_TOKEN`.
 Otherwise, certain tests require either token.
