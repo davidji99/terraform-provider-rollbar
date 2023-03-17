@@ -8,7 +8,7 @@ description: |-
 
 # Rollbar Provider
 
-The Rollbar provider is used to interact with the resources provided by [Rollbar API](https://explorer.docs.rollbar.com/).
+The Rollbar provider is used to interact with the resources provided by [Rollbar API](https://docs.rollbar.com/).
 
 ## Example Usage
 
